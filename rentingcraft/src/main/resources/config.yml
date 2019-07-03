@@ -1,0 +1,89 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      General                         | #
+# +------------------------------------------------------+ #
+############################################################
+
+# What language file to use for messages & texts for the plugin
+# If you want to edit a message you can do so by changing the text in the corresponding messages_XX.yml file
+language: 'EN'
+
+# The visual currency you use on your server
+currency: '$'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                      Database                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# These settings allow you to switch from storing data in a local SQLite database to a remote SQL database
+use-remote-db: false
+remote-host: 'localhost:3306'
+remote-user: 'example'
+remote-pass: 'password'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       Tools                          | #
+# +------------------------------------------------------+ #
+############################################################
+
+# To disable a tool from being rented simply comment the specific line out using a # in front
+
+tools:
+  - 'BOW'
+  - 'CARROT_ON_A_STICK'
+  - 'CHAINMAIL_BOOTS'
+  - 'CHAINMAIL_CHESTPLATE'
+  - 'CHAINMAIL_HELMET'
+  - 'CHAINMAIL_LEGGINGS'
+  - 'CROSSBOW'
+  - 'DIAMOND_AXE'
+  - 'DIAMOND_BOOTS'
+  - 'DIAMOND_CHESTPLATE'
+  - 'DIAMOND_HELMET'
+  - 'DIAMOND_HOE'
+  - 'DIAMOND_LEGGINGS'
+  - 'DIAMOND_PICKAXE'
+  - 'DIAMOND_SHOVEL'
+  - 'DIAMOND_SWORD'
+  - 'ELYTRA'
+  - 'FISHING_ROD'
+  - 'FLINT_AND_STEEL'
+  - 'GOLDEN_AXE'
+  - 'GOLDEN_BOOTS'
+  - 'GOLDEN_CHESTPLATE'
+  - 'GOLDEN_HELMET'
+  - 'GOLDEN_HOE'
+  - 'GOLDEN_LEGGINGS'
+  - 'GOLDEN_PICKAXE'
+  - 'GOLDEN_SHOVEL'
+  - 'GOLDEN_SWORD'
+  - 'IRON_AXE'
+  - 'IRON_BOOTS'
+  - 'IRON_CHESTPLATE'
+  - 'IRON_HELMET'
+  - 'IRON_HOE'
+  - 'IRON_LEGGINGS'
+  - 'IRON_PICKAXE'
+  - 'IRON_SHOVEL'
+  - 'IRON_SWORD'
+  - 'LEATHER_BOOTS'
+  - 'LEATHER_CHESTPLATE'
+  - 'LEATHER_HELMET'
+  - 'LEATHER_LEGGINGS'
+  - 'SHEARS'
+  - 'SHIELD'
+  - 'STONE_AXE'
+  - 'STONE_HOE'
+  - 'STONE_PICKAXE'
+  - 'STONE_SHOVEL'
+  - 'STONE_SWORD'
+  - 'TRIDENT'
+  - 'TURTLE_HELMET'
+  - 'WOODEN_AXE'
+  - 'WOODEN_HOE'
+  - 'WOODEN_PICKAXE'
+  - 'WOODEN_SHOVEL'
+  - 'WOODEN_SWORD'

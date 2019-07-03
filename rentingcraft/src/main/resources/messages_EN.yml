@@ -1,0 +1,46 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                       Notes                          | #
+# +------------------------------------------------------+ #
+############################################################
+
+# If you want to edit this file only edit the sentence after the ":"
+# Make sure the sentence always starts with a " and finishes with a "
+#
+# Most messages support color codes. Only the messages containing a "&" symbols are supporting the color format
+# The correct color formats can be found on: https://minecraft.gamepedia.com/Formatting_codes
+#
+# If you see text containing characters like {0} this means a value will be placed on that location
+# You can move these around or remove them but note this will impact the actual text and potentially not show the value
+#
+# If you are translating this file to a different language please tell me.
+# Then I can add the translation into the plugin itself.
+
+player-command: "This command is player only!"
+
+commands:
+  offer:
+    not-supported: "&cThe item in your hand cannot be offered for renting."
+    max1: "&cMake sure you only have 1 item in your hand!"
+
+inventory:
+  confirm: "&aConfirm"
+  cancel: "&cCancel"
+  add-offer:
+    title: "Confirm Item"
+    confirm: "&aClick to confirm and go to price menu"
+    cancel: "&cClick to cancel offer"
+    close-unfinished: "&cItem offering cancelled!"
+  set-price:
+    title: "Set price by clicking the items"
+    confirm: "&aClick to confirm the price and finish the process"
+    cancel: "&cClick to cancel the price setting"
+    add1: "&aAdd 1"
+    add1click: "&aClick to add 1"
+    add5: "&aAdd 5"
+    add5click: "&aClick to add 5"
+    current: "&6Current price: {0}"
+    remove5: "&cRemove 5"
+    remove5click: "&cClick to remove 5"
+    remove1: "&cRemove 1"
+    remove1click: "&cClick to remove 1"

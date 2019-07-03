@@ -1,0 +1,17 @@
+name: RentingCraft
+author: GyllieGyllie
+main: net.gylliegyllie.rentingcraft.Plugin
+version: 2.0.0
+description: A renting plugin that allows players to rent/offer tools
+api-version: 1.14
+depend: [Vault]
+commands:
+  rent:
+    description: use this to open the rent gui and find tools or other stuff you can rent.
+    permission: rc.rent
+  offer:
+    description: use this to add one of your tools to the renting system.
+    permission: rc.offer
+  myoffer:
+    description: use this to see what offers you are running and stop offers.
+    permission: rc.offer
