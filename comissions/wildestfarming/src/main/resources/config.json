@@ -1,0 +1,9 @@
+[
+  {
+    "plant": "WHEAT",
+    "packet": "PAPER",
+    "packetName": "Wheat Seeds Packet",
+    "minimum": 1,
+    "maximum": 3
+  }
+]

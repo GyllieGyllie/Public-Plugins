@@ -1,0 +1,6 @@
+name: WildestFarming
+author: GyllieGyllie
+main: net.gylliegyllie.wildestfarming.Plugin
+version: 1.0
+description: Commission for WildestPartnership | Farming overhaul
+api-version: 1.13
