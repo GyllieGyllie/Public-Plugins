@@ -1,9 +1,93 @@
 [
   {
+    "plant": "BEETROOT",
+    "packet": "PAPER",
+    "packetName": "Beetroot Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "BROWN_MUSHROOM",
+    "packet": "PAPER",
+    "packetName": "Brown Mushroom Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "CACTUS",
+    "packet": "PAPER",
+    "packetName": "Cactus Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "CARROT",
+    "packet": "PAPER",
+    "packetName": "Carrot Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "CHORUS_FLOWER",
+    "packet": "PAPER",
+    "packetName": "Chorus Flower Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "COCOA_BEANS",
+    "packet": "PAPER",
+    "packetName": "Cocoa Beans Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "MELON",
+    "packet": "PAPER",
+    "packetName": "Melon Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "NETHER_WART",
+    "packet": "PAPER",
+    "packetName": "Nether Wart Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "POTATO",
+    "packet": "PAPER",
+    "packetName": "Potato Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "PUMPKIN",
+    "packet": "PAPER",
+    "packetName": "Pumpkin Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "RED_MUSHROOM",
+    "packet": "PAPER",
+    "packetName": "Red Mushroom Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
+    "plant": "SUGAR_CANE",
+    "packet": "PAPER",
+    "packetName": "Sugar Cane Seeds Packet",
+    "minimum": 0,
+    "maximum": 0
+  },
+  {
     "plant": "WHEAT",
     "packet": "PAPER",
     "packetName": "Wheat Seeds Packet",
-    "minimum": 1,
-    "maximum": 3
+    "minimum": 0,
+    "maximum": 0
   }
 ]

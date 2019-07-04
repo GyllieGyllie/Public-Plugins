@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -35,7 +36,7 @@ public class SeedDropListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (event.isDropItems()) {
 			PlantConfig config = this.plugin.getConfiguration().getForPlant(event.getBlock().getType());
@@ -47,6 +48,8 @@ public class SeedDropListener implements Listener {
 				ItemMeta itemMeta = itemStack.getItemMeta();
 				itemMeta.setDisplayName(ChatColor.AQUA + config.packetName);
 				itemStack.setItemMeta(itemMeta);
+
+				this.plugin.addCustomFlag(itemStack, config.plant.name());
 
 				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), itemStack);
 			}

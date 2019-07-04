@@ -4,3 +4,8 @@ main: net.gylliegyllie.wildestfarming.Plugin
 version: 1.0
 description: Commission for WildestPartnership | Farming overhaul
 api-version: 1.13
+commands:
+  seedpacket:
+    permission: seedpacket.use
+    usage: /seedpacket <player> <plant> <quantity>
+    description: give a player seedpackets

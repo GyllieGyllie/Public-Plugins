@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -26,9 +27,9 @@ public class PlantingListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onBlockClick(PlayerInteractEvent event) {
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock() != null) {
 
 			ItemStack itemInHand = event.getPlayer().getInventory().getItemInMainHand();
 
@@ -38,25 +39,27 @@ public class PlantingListener implements Listener {
 			}
 
 			// We trying to plant a packet
-			else if (event.getBlockFace() == BlockFace.UP) {
+			else {
 
-				List<PlantConfig> configs = this.plugin.getConfiguration().getForPacket(itemInHand.getType());
+				String plant = this.plugin.getCustomFlag(itemInHand);
 
-				if (configs != null && configs.size() > 0 && itemInHand.hasItemMeta() && itemInHand.getItemMeta().hasDisplayName()) {
-					Bukkit.broadcastMessage("possible configs");
-					String name = ChatColor.stripColor(itemInHand.getItemMeta().getDisplayName());
+				if (plant != null) {
 
-					PlantConfig config = configs.stream().filter(c -> c.packetName.equals(name)).findFirst().orElse(null);
+					PlantConfig config = this.plugin.getConfiguration().getForPlant(Material.valueOf(plant));
 
+					// We have a possible packet
 					if (config != null) {
-						Bukkit.broadcastMessage("Found config");
-						Block placing = event.getClickedBlock().getRelative(BlockFace.UP);
 
-						switch (config.plant) {
-							case WHEAT:
-								placing.setType(Material.WHEAT);
-								((Ageable) placing.getBlockData()).setAge(0);
-								break;
+						Block placing = event.getClickedBlock().getRelative(event.getBlockFace());
+
+						// Verifying spot is empty, correct block & side clicked
+						if (placing.getType() == Material.AIR && ItemUtil.isPlantable(config.plant, event.getClickedBlock())
+								&& ItemUtil.isFaceSupported(config.plant, event.getBlockFace())) {
+
+							itemInHand.setAmount(itemInHand.getAmount() - 1);
+							event.getPlayer().getInventory().setItemInMainHand(itemInHand);
+
+							ItemUtil.setBlock(config.plant, placing);
 						}
 					}
 				}

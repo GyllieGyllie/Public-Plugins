@@ -26,7 +26,6 @@ public class Configuration {
 	private List<PlantConfig> configs;
 
 	private Map<Material, PlantConfig> plantMapping = new HashMap<>();
-	private Map<Material, List<PlantConfig>> packetMapping = new HashMap<>();
 
 	public Configuration(Plugin plugin) throws Exception {
 		this.plugin = plugin;
@@ -59,9 +58,6 @@ public class Configuration {
 
 		for (PlantConfig config : this.configs) {
 			this.plantMapping.put(config.plant, config);
-
-			this.packetMapping.putIfAbsent(config.packet, new ArrayList<>());
-			this.packetMapping.get(config.packet).add(config);
 		}
 	}
 
@@ -71,9 +67,5 @@ public class Configuration {
 
 	public PlantConfig getForPlant(Material plant) {
 		return this.plantMapping.get(plant);
-	}
-
-	public List<PlantConfig> getForPacket(Material packet) {
-		return this.packetMapping.get(packet);
 	}
 }
