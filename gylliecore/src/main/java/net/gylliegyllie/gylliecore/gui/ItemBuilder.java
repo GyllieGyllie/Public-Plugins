@@ -7,6 +7,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -21,6 +22,7 @@ public class ItemBuilder {
 
 	private Material material = null;
 	private Integer amount = 1;
+	private Integer damage = null;
 	private Byte data = 0;
 	private String displayName = null;
 	private List<String> lore = null;
@@ -76,6 +78,12 @@ public class ItemBuilder {
 		return this;
 	}
 
+	public ItemBuilder damage(Integer damage) {
+		this.damage = damage;
+
+		return this;
+	}
+
 	public ItemBuilder data(Byte data) {
 		this.data = data;
 
@@ -90,6 +98,12 @@ public class ItemBuilder {
 
 	public ItemBuilder lore(String... strings) {
 		this.lore = Arrays.asList(strings);
+
+		return this;
+	}
+
+	public ItemBuilder lore(List<String> strings) {
+		this.lore = strings;
 
 		return this;
 	}
@@ -128,7 +142,7 @@ public class ItemBuilder {
 		ItemStack itemStack = new ItemStack(getMaterial(), getAmount(), (short) getData());
 		ItemMeta itemMeta;
 
-		if ((this.displayName != null) || (this.lore != null) || (this.skullName != null)) {
+		if ((this.displayName != null) || (this.lore != null) || (this.skullName != null) || (this.damage != null)) {
 			itemMeta = itemStack.getItemMeta();
 
 			if (itemMeta != null) {
@@ -151,6 +165,10 @@ public class ItemBuilder {
 					itemMeta.removeItemFlags(ItemFlag.HIDE_DESTROYS);
 					itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
 					itemMeta.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+				}
+
+				if (this.damage != null && itemMeta instanceof Damageable) {
+					((Damageable) itemMeta).setDamage(this.damage);
 				}
 
 				itemStack.setItemMeta(itemMeta);

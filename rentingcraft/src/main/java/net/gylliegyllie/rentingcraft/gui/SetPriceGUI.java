@@ -24,7 +24,7 @@ public class SetPriceGUI extends GuiScreen {
 				.lore(this.plugin.getMessages().getMessage("inventory.set-price.confirm"))
 				.build()))
 				.onClick(event ->
-						new SetPriceGUI(this.plugin, player, itemStack)
+						this.plugin.getRentingManager().createNewOffer(this.getPlayer(), itemStack, this.price)
 				);
 
 		this.setItem(2, this.createItem(new ItemBuilder()

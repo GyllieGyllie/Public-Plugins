@@ -4,6 +4,6 @@ import net.gylliegyllie.rentingcraft.renting.Rent;
 
 public abstract class StorageManager {
 
-	public abstract void storeNewRent(Rent rent);
+	public abstract boolean storeNewRent(Rent rent);
 
 }

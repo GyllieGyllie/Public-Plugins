@@ -5,6 +5,7 @@ import net.gylliegyllie.rentingcraft.commands.OfferCommand;
 import net.gylliegyllie.rentingcraft.files.Messages;
 import net.gylliegyllie.rentingcraft.managers.EconomyManager;
 import net.gylliegyllie.rentingcraft.managers.ToolManager;
+import net.gylliegyllie.rentingcraft.renting.RentingManager;
 import net.gylliegyllie.rentingcraft.storage.LiteStorage;
 import net.gylliegyllie.rentingcraft.storage.StorageManager;
 import org.bukkit.ChatColor;
@@ -22,6 +23,7 @@ public class Plugin extends JavaPlugin {
 
 	private EconomyManager economyManager;
 	private ToolManager toolManager;
+	private RentingManager rentingManager;
 
 	@Override
 	public void onEnable() {
@@ -35,10 +37,17 @@ public class Plugin extends JavaPlugin {
 			Plugin.prefix = prefix;
 		}
 
-		if (this.configuration.getBoolean("use-remote-db")) {
-			// TODO SQL
-		} else {
-			this.storage = new LiteStorage(this);
+		try {
+			if (this.configuration.getBoolean("use-remote-db")) {
+				// TODO SQL
+			} else {
+				this.storage = new LiteStorage(this);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.getLogger().severe("Failed to initialize storage mechanism!");
+			this.getServer().getPluginManager().disablePlugin(this);
+			return;
 		}
 
 		// Initialize economy manager
@@ -51,6 +60,7 @@ public class Plugin extends JavaPlugin {
 		}
 
 		this.toolManager = new ToolManager(this);
+		this.rentingManager = new RentingManager(this);
 
 		this.getCommand("offer").setExecutor(new OfferCommand(this));
 
@@ -71,7 +81,15 @@ public class Plugin extends JavaPlugin {
 		return this.messages;
 	}
 
+	public StorageManager getStorage() {
+		return this.storage;
+	}
+
 	public ToolManager getToolManager() {
 		return this.toolManager;
+	}
+
+	public RentingManager getRentingManager() {
+		return this.rentingManager;
 	}
 }

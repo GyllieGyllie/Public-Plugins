@@ -23,6 +23,11 @@ commands:
     not-supported: "&cThe item in your hand cannot be offered for renting."
     max1: "&cMake sure you only have 1 item in your hand!"
 
+managers:
+  renting:
+    rent-added: "&aYour item is successfully been offered!"
+    rent-add-failed: "&cFailed to store your new rent. Please try again."
+
 inventory:
   confirm: "&aConfirm"
   cancel: "&cCancel"
