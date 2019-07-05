@@ -1,8 +1,10 @@
 package net.gylliegyllie.wildestfarming.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Ageable;
 
 import java.util.Arrays;
@@ -49,14 +51,55 @@ public class ItemUtil {
 			case CHORUS_FLOWER:
 				return block.getType() == Material.END_STONE;
 			case SUGAR_CANE:
-				return block.getType() == Material.GRASS
+				if (block.getType() == Material.GRASS_BLOCK
 						|| block.getType() == Material.DIRT
-						|| block.getType() == Material.SAND;
+						|| block.getType() == Material.SAND
+						|| block.getType() == Material.PODZOL
+						|| block.getType() == Material.COARSE_DIRT
+						|| block.getType() == Material.RED_SAND) {
+					for (BlockFace face : Arrays.asList(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)) {
+						Block relative = block.getRelative(face);
+
+						if (relative.getType() == Material.WATER || relative.getType() == Material.FROSTED_ICE) {
+							return true;
+						}
+					}
+				}
 			case BROWN_MUSHROOM:
 			case RED_MUSHROOM:
-				return block.getType() == Material.STONE;
+				if (block.getType() == Material.MYCELIUM || block.getType() == Material.PODZOL) {
+					return true;
+				}
+
+				if (block.getRelative(BlockFace.UP).getLightLevel() < 13) {
+
+					Block b = block.getRelative(BlockFace.UP);
+
+					while (b.getY() < 255) {
+						if (b.getType() != Material.AIR) {
+							return true;
+						}
+
+						b = b.getRelative(BlockFace.UP);
+					}
+
+				}
+
+				return false;
 			case CACTUS:
-				return block.getType() == Material.SAND;
+				if (block.getType() == Material.SAND) {
+					Block placing = block.getRelative(BlockFace.UP);
+
+					for (BlockFace face : Arrays.asList(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)) {
+						Block relative = placing.getRelative(face);
+
+						if (relative.getType() != Material.AIR) {
+							return false;
+						}
+					}
+
+					return true;
+				}
 		}
 
 		return false;
@@ -87,10 +130,10 @@ public class ItemUtil {
 		return false;
 	}
 
-	public static void setBlock(Material material, Block block) {
+	public static void setBlock(Material material, Block block, BlockFace facing) {
 		switch (material) {
 			case BEETROOT:
-				block.setType(Material.BEETROOT_SEEDS);
+				block.setType(Material.BEETROOTS);
 				break;
 			case BROWN_MUSHROOM:
 				block.setType(Material.BROWN_MUSHROOM);
@@ -106,6 +149,11 @@ public class ItemUtil {
 				break;
 			case COCOA_BEANS:
 				block.setType(Material.COCOA);
+
+				Directional directional = (Directional) block.getBlockData();
+				directional.setFacing(facing);
+				block.setBlockData(directional);
+
 				break;
 			case MELON:
 				block.setType(Material.MELON_STEM);

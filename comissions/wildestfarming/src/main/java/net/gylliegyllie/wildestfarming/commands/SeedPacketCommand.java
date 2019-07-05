@@ -43,7 +43,7 @@ public class SeedPacketCommand implements CommandExecutor {
 			return true;
 		}
 
-		if (sender.hasPermission("seedpacket." + plant.name().toLowerCase())) {
+		if (!sender.hasPermission("seedpacket." + plant.name().toLowerCase())) {
 			sender.sendMessage(ChatColor.RED + "No permissions!");
 			return true;
 		}

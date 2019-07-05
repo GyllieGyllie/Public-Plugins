@@ -62,7 +62,9 @@ public class VeinMineListener implements Listener {
 
 			switch (event.getChangedType()) {
 				case SUGAR_CANE:
-					this.breakBlock(event.getBlock(), event.getChangedType());
+					if (event.getSourceBlock().getRelative(BlockFace.UP).equals(event.getBlock())) {
+						this.breakBlock(event.getBlock(), event.getChangedType());
+					}
 					break;
 			}
 		}

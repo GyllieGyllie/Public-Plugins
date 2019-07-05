@@ -3,12 +3,8 @@ package net.gylliegyllie.wildestfarming.listeners;
 import net.gylliegyllie.wildestfarming.Plugin;
 import net.gylliegyllie.wildestfarming.configuration.PlantConfig;
 import net.gylliegyllie.wildestfarming.utils.ItemUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Ageable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,8 +12,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 public class PlantingListener implements Listener {
 
@@ -59,8 +53,10 @@ public class PlantingListener implements Listener {
 							itemInHand.setAmount(itemInHand.getAmount() - 1);
 							event.getPlayer().getInventory().setItemInMainHand(itemInHand);
 
-							ItemUtil.setBlock(config.plant, placing);
+							ItemUtil.setBlock(config.plant, placing, event.getBlockFace().getOppositeFace());
 						}
+
+						event.setCancelled(true);
 					}
 				}
 			}
