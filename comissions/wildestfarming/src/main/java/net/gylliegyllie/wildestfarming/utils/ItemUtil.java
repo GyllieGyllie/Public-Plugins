@@ -32,7 +32,8 @@ public class ItemUtil {
 	);
 
 	public final static List<Material> VEIN_MINE = Arrays.asList(
-			Material.SUGAR_CANE
+			Material.SUGAR_CANE,
+			Material.CACTUS
 	);
 
 	public static boolean isPlantable(Material material, Block block) {

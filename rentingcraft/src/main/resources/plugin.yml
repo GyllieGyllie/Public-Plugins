@@ -5,6 +5,7 @@ version: 2.0.0
 description: A renting plugin that allows players to rent/offer tools
 api-version: 1.14
 depend: [Vault]
+load: POSTWORLD
 commands:
   rent:
     description: use this to open the rent gui and find tools or other stuff you can rent.

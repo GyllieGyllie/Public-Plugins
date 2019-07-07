@@ -56,6 +56,7 @@ public class VeinMineListener implements Listener {
 		}
 	}
 
+	/*
 	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPhysics(BlockPhysicsEvent event) {
 		if (ItemUtil.VEIN_MINE.contains(event.getChangedType())) {
@@ -69,15 +70,14 @@ public class VeinMineListener implements Listener {
 			}
 		}
 	}
+	*/
 
 	private void breakBlock(Block block, Material material) {
-		for (BlockFace blockFace : Arrays.asList(BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)) {
-			Block relative = block.getRelative(blockFace);
+		Block relative = block.getRelative(BlockFace.DOWN);
 
-			if (relative.getType() == material) {
-				relative.breakNaturally();
-				this.breakBlock(relative, material);
-			}
+		if (relative.getType() == material) {
+			relative.breakNaturally();
+			this.breakBlock(relative, material);
 		}
 	}
 }
