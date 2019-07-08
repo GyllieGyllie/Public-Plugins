@@ -64,6 +64,8 @@ public class GuiScreen {
 		this.items.put(slot, item);
 		this.inventory.setItem(slot, item.getItemStack());
 
+		this.needUpdate = true;
+
 		return item;
 	}
 

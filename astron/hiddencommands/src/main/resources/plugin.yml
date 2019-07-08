@@ -1,0 +1,5 @@
+name: HiddenCommands
+author: GyllieGyllie
+main: com.astronnetwork.hiddencommands.Plugin
+version: 1.0
+description: A plugins that hides certain commands

@@ -1,0 +1,10 @@
+name: Traveler
+author: GyllieGyllie
+main: com.astronnetwork.traveler.Plugin
+version: 1.0
+description: A plugins that adds a traveler shop
+depend:
+  - Vault
+commands:
+  traveler:
+    description: open the traveler GUI

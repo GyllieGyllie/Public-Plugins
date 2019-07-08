@@ -1,0 +1,31 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      General                         | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This is the general message used for when no commands specific message is set
+global_message: '&cThis command is disabled!'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                      Commands                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# All disabled commands
+commands:
+
+  # syntax of the command, so in this case would be /example
+  example:
+
+    # should be false if command is blocked, can be set to true if you want to enable again but not remove config
+    enabled: false
+
+    # list of worlds where the command should be disabled, if disabled in all worlds remove this section
+    # names should all be lowercased, even if real world name is not
+    worlds:
+      - world
+
+    # custom message if you do not want to use the global message, remove for using global message
+    message: '&cThis command is not active in this world'
