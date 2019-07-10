@@ -1,0 +1,6 @@
+name: Example
+author: GyllieGyllie
+main: net.gylliegyllie.example.Plugin
+version: 1.0
+description: Example for Airee
+api-version: 1.14
