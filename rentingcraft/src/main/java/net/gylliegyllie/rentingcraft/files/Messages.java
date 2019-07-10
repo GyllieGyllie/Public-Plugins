@@ -23,6 +23,8 @@ public class Messages {
 		if (messages == null) {
 			this.plugin.getLogger().severe("Failed to find Messages file messages_" + language + ".yml. Falling back to English file!");
 			messages = YamlFile.getConfiguration(this.plugin, "messages_EN.yml");
+		} else {
+			this.plugin.getLogger().info("Loaded language file: messages_" + language + ".yml");
 		}
 
 		this.messages = messages;

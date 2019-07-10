@@ -27,6 +27,10 @@ public class Item {
 		this.amount = amount;
 	}
 
+	public int getAmount() {
+		return this.amount;
+	}
+
 	public void attemptPurchase(Player player) {
 
 		synchronized (this) {

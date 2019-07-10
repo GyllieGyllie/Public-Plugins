@@ -37,7 +37,7 @@ public class SetPriceGUI extends GuiScreen {
 					this.updateGold();
 				});
 
-		this.setItem(2, this.createItem(new ItemBuilder()
+		this.setItem(3, this.createItem(new ItemBuilder()
 				.type(Material.EMERALD_BLOCK)
 				.name(this.plugin.getMessages().getMessage("inventory.set-price.add5"))
 				.lore(this.plugin.getMessages().getMessage("inventory.set-price.add5click"))
@@ -80,6 +80,8 @@ public class SetPriceGUI extends GuiScreen {
 				.onClick(event ->
 						this.getPlayer().closeInventory()
 				);
+
+		this.show();
 	}
 
 	private void updateGold() {

@@ -4,6 +4,7 @@ import com.astronnetwork.traveler.commands.TravelerCommand;
 import com.astronnetwork.traveler.economy.EconomyManager;
 import com.astronnetwork.traveler.manager.ItemManager;
 import net.gylliegyllie.gylliecore.files.YamlFile;
+import net.gylliegyllie.gylliecore.gui.GuiManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,6 +30,7 @@ public class Plugin extends JavaPlugin {
 			return;
 		}
 
+		new GuiManager(this);
 		this.itemManager = new ItemManager(this);
 
 		this.getCommand("traveler").setExecutor(new TravelerCommand(this));
@@ -47,7 +49,7 @@ public class Plugin extends JavaPlugin {
 
 	public void saveConfig() {
 		try {
-			this.getConfiguration().save(new File(this.getDataFolder(), "config.json"));
+			this.getConfiguration().save(new File(this.getDataFolder(), "config.yml"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

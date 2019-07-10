@@ -4,7 +4,9 @@ import com.astronnetwork.traveler.Plugin;
 import com.astronnetwork.traveler.manager.Item;
 import net.gylliegyllie.gylliecore.gui.GuiScreen;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class TravelerGUI extends GuiScreen {
 
@@ -28,6 +30,8 @@ public class TravelerGUI extends GuiScreen {
 		int index = 0;
 
 		for (Item item : this.plugin.getItemManager().getItems()) {
+			if (item.getAmount() <= 0) continue;
+
 			this.setItem(index++, this.createItem(item.createShopItem()))
 					.onClick(e ->
 						this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin,
@@ -39,5 +43,8 @@ public class TravelerGUI extends GuiScreen {
 			}
 		}
 
+		while (index < 54) {
+			this.setItem(index++, this.createItem(new ItemStack(Material.AIR)));
+		}
 	}
 }

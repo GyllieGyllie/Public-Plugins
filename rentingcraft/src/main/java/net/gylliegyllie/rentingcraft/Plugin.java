@@ -1,6 +1,7 @@
 package net.gylliegyllie.rentingcraft;
 
 import net.gylliegyllie.gylliecore.files.YamlFile;
+import net.gylliegyllie.gylliecore.gui.GuiManager;
 import net.gylliegyllie.rentingcraft.commands.OfferCommand;
 import net.gylliegyllie.rentingcraft.files.Messages;
 import net.gylliegyllie.rentingcraft.managers.EconomyManager;
@@ -30,6 +31,8 @@ public class Plugin extends JavaPlugin {
 
 		this.configuration = YamlFile.getConfiguration(this, "config.yml");
 		this.messages = new Messages(this);
+
+		new GuiManager(this);
 
 		String prefix = this.messages.getMessage("prefix");
 

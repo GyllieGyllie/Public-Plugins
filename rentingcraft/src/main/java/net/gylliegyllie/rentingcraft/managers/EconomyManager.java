@@ -19,7 +19,7 @@ public class EconomyManager {
 		RegisteredServiceProvider<Economy> rsp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
 
 		if (rsp == null) {
-			throw new RuntimeException("Failed to hook into Vault!");
+			throw new RuntimeException("Failed to hook into Vault Economy! Do you have an economy plugin supporting Vault?");
 		}
 
 		this.economy = rsp.getProvider();

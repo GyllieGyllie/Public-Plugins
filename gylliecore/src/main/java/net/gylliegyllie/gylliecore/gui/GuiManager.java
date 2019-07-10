@@ -20,6 +20,8 @@ public class GuiManager implements Listener {
 	private static Map<UUID, GuiScreen> player_screens = new HashMap<>();
 
 	public GuiManager(JavaPlugin plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
 		plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
 			GuiManager.screens.values().forEach(GuiScreen::update);
 			GuiManager.player_screens.values().forEach(GuiScreen::update);

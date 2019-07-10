@@ -14,7 +14,7 @@ public class YamlFile extends YamlConfiguration {
 		File file = new File(plugin.getDataFolder(), filename);
 
 		if (!file.exists()) {
-			if (file.getParentFile().mkdir()) {
+			if (file.getParentFile().exists() || file.getParentFile().mkdir()) {
 				InputStream in = plugin.getResource(filename);
 
 				if (in == null) {
