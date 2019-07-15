@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<% include head.ejs %>
+
+<body class="d-flex flex-column h-100">
+
+<% include header.ejs %>
+
+<main role="main" class="flex-shrink-0">
+
+    <div class="header-img">
+        <div class="overlay">
+            <div class='container-fluid'>
+                <div class="row">
+                    <div class="col-md-12 header-text">
+                        <img src="/img/Logo.png">
+                        <h1>Stellar SMP</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-section" class="container">
+
+        <div class="row">
+
+            <div class="col col-12 col-md-12 col-sm-12">
+                <h1>500 - Error</h1>
+
+                <h4><%= error_message %></h4>
+
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<% include footer.ejs %>
+
+</body>
+
+</html>

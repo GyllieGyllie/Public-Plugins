@@ -1,0 +1,25 @@
+{
+  "development": {
+    "config_id": "development",
+    "production": false,
+    "maintenance": false,
+    "node_port": 5545,
+    "sql": {
+      "user": "stellarsmp",
+      "pass": "6Wk0fNnIOT84Z6x",
+      "host": "bg170991-001.dbaas.ovh.net",
+      "port": 35142,
+      "database": "stellarsmp"
+    },
+    "twitch": {
+      "client_id": "eiz398lgn1tp1rty6qrpbwk1wqix1h"
+    },
+    "youtube": {
+      "client_id": "AIzaSyBLjb3G7HLvyFepD6B-MpAxK0tCHZO4vqM"
+    }
+  },
+  "production": {
+    "config_id": "production",
+    "production": true
+  }
+}

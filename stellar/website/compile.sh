@@ -1,0 +1,1 @@
+tar -cvzf Website.tar.gz _assets/ _backend/ _frontend/ bin/ app.js config.json package.json
