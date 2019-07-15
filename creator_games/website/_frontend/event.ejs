@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include _globals/head.ejs %>
+
+<body>
+
+<% include _globals/header.ejs %>
+
+<div class="container-fluid margintop bottom-div">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <h2 id="title">Season 4 - Saturday, July 6th</h2>
+                <p id="desc">Below you can browse all the different streamers playing the event. Select a streamer below to donate to the selected streamer in-game.</p>
+            </div>
+        </div>
+    </div>
+    <div id="streamers">
+        <% if (!trailer_released) { %>
+        <h2 id="title">Streamer list will be released on Saturday, June 29th at 2PM EST.</h2>
+        <% } %>
+    </div>
+</div>
+
+<% include _globals/footer.ejs %>
+
+</body>
+
+<% include _globals/scripts.ejs %>
+
+<% if (trailer_released) { %>
+<input id="season-id" type="hidden" value="<%= season %>">
+<script src="/controllers/event.controller.js"></script>
+<% } %>
+
+</html>

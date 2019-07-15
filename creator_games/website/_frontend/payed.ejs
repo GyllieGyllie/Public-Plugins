@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include _globals/head.ejs %>
+
+<body>
+
+<% include _globals/header.ejs %>
+
+<div class="container-fluid bottom-div">
+
+    <div class="spacer"></div>
+
+    <% if (success) { %>
+    <div class="page-header">
+        <h1 id="streamer_name">
+            <img class="head-title" src="https://cravatar.eu/helmavatar/<%= response.donation.streamer %>"/><%= response.donation.streamer %>
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-1"></div>
+        <div class="col-md-8 raised">
+            <div id="alert" class="alert alert-success" role="alert">Payment Completed!</div>
+
+            <h2>Purchase: <%= response.donation.item %></h2>
+            <h2>Price: $<%= response.donation.amount %></h2>
+            <br>
+
+            <h2>Your Username</h2>
+            <label><%= response.donation.name %></label>
+
+            <h2>Your Message</h2>
+            <label><%= response.donation.comment %></label>
+
+            <br><br>
+        </div>
+    </div>
+
+    <% } else { %>
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger" role="alert">Couldn't verify payment. If this is an issue please contact the organisers with reference: #<%= order_id %></div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<% include _globals/footer.ejs %>
+
+</body>
+
+<% include _globals/scripts.ejs %>
+
+</html>

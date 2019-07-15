@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include _globals/head.ejs %>
+
+<body>
+
+<% include _globals/header.ejs %>
+
+<div class="loading" style="display: none;">Loading&#8230;</div>
+
+<div class="container-fluid bottom-div">
+
+    <div class="spacer"></div>
+
+    <% if (success) { %>
+        <% if (buyable) { %>
+            <div class="page-header">
+                <h1 id="streamer_name">
+                    <img class="head-title" src="https://cravatar.eu/helmavatar/<%= name %>"/><%= name %>
+                </h1>
+            </div>
+
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-1"></div>
+                <div class="col-md-8 raised">
+                    <h2>Purchase: <%= item_name %></h2>
+                    <p><%= item_description %></p>
+
+                    <% if (!item_dead) { %>
+                        <h2>Price: $<%= item_price %></h2>
+                    <% } %>
+                    <br>
+                    <h2 style="margin-bottom: 0;">Purchase Info</h2>
+                    <label style="margin-bottom: 25px;">* = required fields</label>
+
+                    <fieldset class="input-group">
+                        <label for="username">Your Username*</label>
+                        <input id="username" name="username" placeholder="Your username" class="form-control required">
+                    </fieldset>
+
+                    <br>
+
+                    <% if (item_dead) { %>
+                        <fieldset class="input-group">
+                            <label for="amount">Donation Amount* (min $1)</label>
+                            <input id="amount" name="amount" type="number" min="1" class="form-control required">
+                        </fieldset>
+
+                        <br>
+                    <% } %>
+
+                    <fieldset class="input-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" placeholder="Your message to streamer" maxlength="500"
+                                  class="form-control"></textarea>
+                    </fieldset>
+
+                    <br>
+
+                    <div id="alert" class="alert alert-danger" role="alert" style="display: none;"></div>
+
+                    <div id="paypal-button-container" style="display: none"></div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="page-header"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger" role="alert">
+                        This item cannot be purchased yet
+                    </div>
+                    <div>
+                        <p>
+                            All items are available once the game starts
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+    <% } else { %>
+        <div class="page-header"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert">Failed to load information. Try again please.</div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<% include _globals/footer.ejs %>
+
+</body>
+
+<% include _globals/scripts.ejs %>
+
+<% if (success) { %>
+    <script src="/controllers/buy.controller.js"></script>
+
+    <% if (buyable) { %>
+        <script src="https://www.paypal.com/sdk/js?client-id=<%= paypal_key %>"></script>
+    <% } %>
+<% } %>
+
+</html>

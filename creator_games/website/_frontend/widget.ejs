@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+
+    <style>
+        html {
+            font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .bar {
+            width: 100%;
+            height: 6rem;
+            background-color: #E01706;
+            border-radius: 10px;
+            display: table;
+        }
+
+        .logo {
+            text-align: left;
+            padding: 0.5rem 2rem 0.5rem 3rem;
+            display: table-cell;
+            width: 10%;
+        }
+
+        .name {
+            display: table-cell;
+            height: 100%;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            vertical-align: middle;
+            width: 15%;
+        }
+
+        .donations,
+        .pool {
+            display: table-cell;
+            height: 100%;
+            font-size: 2rem;
+            line-height: 2.3rem;
+            font-weight: bold;
+            color: white;
+            vertical-align: middle;
+            width: 15%;
+        }
+
+        .charity {
+            display: table-cell;
+            height: 100%;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            vertical-align: middle;
+            width: 25%;
+        }
+
+        .invis {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body id="body" class="invis">
+<div class="bar">
+    <div class="logo">
+        <img src="/img/WinnerTakesAll_Logo.png" style="width: 5rem;"/>
+    </div>
+    <div id="name" class="name">
+
+    </div>
+    <div id="donations" class="donations">
+
+    </div>
+    <div id="pool" class="pool">
+
+    </div>
+    <div class="donations">
+        Donate at: winnertakesall.io
+    </div>
+</div>
+</body>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/custom.js"></script>
+<script>
+
+    $.when( $.ready ).then(function() {
+        get();
+        setInterval(get, 30 * 1000);
+    });
+
+    function get() {
+        $.ajax({
+            url: "/api/streamer_small/<%= streamer %>",
+            type: 'GET',
+            responseType: 'application/json',
+            success: function (result) {
+                result = JSON.parse(result);
+
+                console.log(result);
+
+                if (result.success) {
+                    $("#name").html(result.name);
+                    $("#donations").html("Donations: " + result.donations + "<br>Raised: $" + result.raised);
+                    $("#pool").html("Prize Pool: $" + result.global);
+                    $("#body").removeClass("invis");
+                    //$("#charity").html(result.charity);
+                }
+            }
+        });
+    }
+</script>
+</html>

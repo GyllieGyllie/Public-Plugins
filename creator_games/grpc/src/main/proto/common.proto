@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+// Creates independent Java class files for each top-level message
+option java_multiple_files = true;
+
+// Java package to place generated Java class files in
+option java_package = "net.gylliegyllie.creatorgames.grpc.common";
+
+message SuccessResponse {
+    bool success = 1;
+}
+
+message ExtendedSuccessResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message ExtendedRepeatedSuccessResponse {
+    bool success = 1;
+    repeated string message = 2;
+}
+
+message Empty {}
+
+message Season {
+    int32 season = 1;
+}
+
+message Streamer {
+    string name = 1;
+    string link = 2;
+    int64 raised = 3;
+    int64 donations = 4;
+    bool dead = 5;
+    bool caster = 6;
+    string charity = 7;
+    int32 season = 8;
+    bool winner = 9;
+    string team = 10;
+}
+
+message DonationItem {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 price = 4;
+    bool positive = 5;
+    bool dead = 6;
+    bool buyable = 7;
+    int32 season = 8;
+    int32 last_round = 9;
+}
+
+message Donation {
+    string name = 1;
+    string comment = 2;
+    string streamer = 3;
+    string item = 4;
+    int32 amount = 5;
+    int32 season = 6;
+}

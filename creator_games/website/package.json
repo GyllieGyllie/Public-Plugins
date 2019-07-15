@@ -1,0 +1,31 @@
+{
+  "name": "tdm-moedertaal-website",
+  "version": "1.0.0-beta",
+  "description": "TDM Moedertaal",
+  "main": "app.js",
+  "scripts": {
+    "start": "node bin/main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GyllieGyllie/Moedertaal.git"
+  },
+  "author": "Guillian Bouchier",
+  "bugs": {
+    "url": "https://github.com/GyllieGyllie/Moedertaal/issues"
+  },
+  "homepage": "https://github.com/GyllieGyllie/Moedertaal#readme",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.1.0",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "google-protobuf": "^3.0.0",
+    "grpc": "^1.17.0",
+    "http-errors": "^1.7.1",
+    "moment": "^2.23.0",
+    "morgan": "^1.9.1",
+    "req-flash": "0.0.3",
+    "rotating-file-stream": "^1.4.0"
+  }
+}
