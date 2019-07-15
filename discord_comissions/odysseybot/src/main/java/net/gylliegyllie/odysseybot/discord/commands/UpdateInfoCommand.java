@@ -15,6 +15,7 @@ public class UpdateInfoCommand extends DiscordCommand {
 	private final Logger logger = LoggerFactory.getLogger(UpdateInfoCommand.class);
 
 	private final Pattern IMGUR = Pattern.compile("[http://|https://]*imgur.com/gallery/[a-zA-Z0-9]+");
+	private final Pattern MAIL = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
 
 	public UpdateInfoCommand() {
 		super(false);
@@ -51,6 +52,8 @@ public class UpdateInfoCommand extends DiscordCommand {
 					statement.setString(2, portfolio);
 					statement.setString(3, portfolio);
 
+					statement.execute();
+
 					MessageUtil.sendMessage(event, "Successfully updated your portfolio!", true);
 
 				} catch (Exception e) {
@@ -61,7 +64,38 @@ public class UpdateInfoCommand extends DiscordCommand {
 				}
 
 				break;
+
 			case "-pp":
+				String email = args[1];
+
+				if (!this.MAIL.matcher(email).matches()) {
+					MessageUtil.sendMessage(event, "Invalid email provided!", true);
+					return;
+				}
+
+				connection = null;
+				statement = null;
+
+				try {
+
+					connection = Bot.getInstance().getSqlManager().getConnection();
+
+					statement = connection.prepareStatement("INSERT INTO members (id, paypal) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET paypal = ?;");
+					statement.setLong(1, event.getAuthor().getIdLong());
+					statement.setString(2, email);
+					statement.setString(3, email);
+
+					statement.execute();
+
+					MessageUtil.sendMessage(event, "Successfully updated your PayPal mail!", true);
+
+				} catch (Exception e) {
+					logger.error("", e);
+					MessageUtil.sendMessage(event, "Something went wrong updating your PayPal!", true);
+				} finally {
+					Bot.getInstance().getSqlManager().close(connection, statement, null);
+				}
+
 				break;
 			default:
 				MessageUtil.sendMessage(event, "Invalid usage!", true);

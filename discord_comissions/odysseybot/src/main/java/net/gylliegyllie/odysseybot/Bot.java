@@ -3,6 +3,7 @@ package net.gylliegyllie.odysseybot;
 import net.gylliegyllie.odysseybot.configuration.Configuration;
 import net.gylliegyllie.odysseybot.discord.DiscordBot;
 import net.gylliegyllie.odysseybot.managers.SQLManager;
+import net.gylliegyllie.odysseybot.tickets.TicketManager;
 import net.gylliegyllie.servicecore.Core;
 import net.gylliegyllie.servicecore.commands.CommandManager;
 import org.slf4j.Logger;
@@ -33,6 +34,8 @@ public class Bot {
 	private SQLManager sqlManager;
 	private DiscordBot bot;
 
+	private TicketManager ticketManager;
+
 	public Bot() {
 		this.configuration = (Configuration) Core.loadConfiguration(new Configuration());
 
@@ -54,11 +57,20 @@ public class Bot {
 		}
 
 		try {
-			this.bot = new DiscordBot(this.configuration);
-		} catch (LoginException e) {
+			this.bot = new DiscordBot(this, this.configuration);
+		} catch (LoginException | InterruptedException e) {
 			logger.error("Failed to login", e);
 			System.exit(-1);
 		}
+
+		try {
+			this.ticketManager = new TicketManager(this);
+		} catch (Exception e) {
+			logger.error("Failed to initialize ticket system!", e);
+			System.exit(-1);
+		}
+
+		this.bot.init();
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 
@@ -71,7 +83,19 @@ public class Bot {
 		CommandManager.listenToCommands();
 	}
 
+	public Configuration getConfiguration() {
+		return this.configuration;
+	}
+
 	public SQLManager getSqlManager() {
 		return this.sqlManager;
+	}
+
+	public DiscordBot getBot() {
+		return this.bot;
+	}
+
+	public TicketManager getTicketManager() {
+		return this.ticketManager;
 	}
 }

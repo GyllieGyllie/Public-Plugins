@@ -1,6 +1,7 @@
 package net.gylliegyllie.odysseybot.util;
 
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class MessageUtil {
@@ -11,5 +12,9 @@ public class MessageUtil {
 		}
 
 		return event.getChannel().sendMessage(message).complete();
+	}
+
+	public static void sendDM(User user, String message) {
+		user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
 	}
 }

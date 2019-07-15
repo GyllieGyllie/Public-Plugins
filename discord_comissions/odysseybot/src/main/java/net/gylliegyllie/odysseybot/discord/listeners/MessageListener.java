@@ -5,7 +5,10 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.gylliegyllie.odysseybot.Bot;
 import net.gylliegyllie.odysseybot.discord.commands.ApplyCommand;
+import net.gylliegyllie.odysseybot.discord.commands.CloseCommand;
 import net.gylliegyllie.odysseybot.discord.commands.DiscordCommand;
+import net.gylliegyllie.odysseybot.discord.commands.DoneCommand;
+import net.gylliegyllie.odysseybot.discord.commands.QuickDoneCommand;
 import net.gylliegyllie.odysseybot.discord.commands.UpdateInfoCommand;
 import net.gylliegyllie.odysseybot.util.MessageUtil;
 import org.slf4j.Logger;
@@ -21,9 +24,18 @@ public class MessageListener extends ListenerAdapter {
 
 	private final Map<String, DiscordCommand> commands = new HashMap<>();
 
-	public MessageListener() {
+	private final Bot bot;
+
+	public MessageListener(Bot bot) {
+		this.bot = bot;
+	}
+
+	public void init() {
 		this.commands.put("apply", new ApplyCommand());
 		this.commands.put("updateinfo", new UpdateInfoCommand());
+		this.commands.put("close", new CloseCommand(this.bot));
+		this.commands.put("done", new DoneCommand(this.bot));
+		this.commands.put("quickdone", new QuickDoneCommand(this.bot));
 	}
 
 	@Override
@@ -63,6 +75,10 @@ public class MessageListener extends ListenerAdapter {
 				logger.info(event.getAuthor().getName() + " executed command: " + message.substring(1));
 
 			}
+		} else if (event.getChannel().getName().startsWith("ticket_")) {
+
+			this.bot.getTicketManager().handleMessage(event, Long.valueOf(event.getChannel().getName().split("_")[1]));
+
 		}
 	}
 }
