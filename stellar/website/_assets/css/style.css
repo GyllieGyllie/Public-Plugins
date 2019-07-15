@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css?family=Sniglet');
+
+* {
+    font-family: 'Sniglet', cursive;
+}
+
+*:focus {
+    outline: none;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        background-size: 600px 100%;
+    }
+}
+
+select,
+input,
+textarea {
+    font-weight: 600;
+    background-color: rgba(88, 90, 94, 0.9);
+    color: #ffffff;
+}
+
+select option {
+    font-weight: 600;
+    background-color: rgba(88, 90, 94, 1);
+}
+
+/* Navbar */
+.navbar {
+    background-color: rgba(88, 90, 94, 0.9);
+}
+
+.navbar-brand {
+    padding: 0 15px;
+    margin: 3px 0;
+}
+
+.navbar .container-fluid {
+    margin: 0.5rem 0;
+}
+
+.navbar img {
+    height: 2rem;
+    margin-right: 0.5rem;
+}
+
+.navbar a {
+    font-size: 1.1rem;
+    color: #fff !important;
+}
+
+.nav-item {
+    margin: 0 0.5rem;
+}
+
+.nav-item > a:hover,
+.nav-item > a:focus,
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+    background-color: rgba(137, 22, 22, 0.3);
+    border: solid 2px rgba(137, 22, 22, 0.9);
+    border-radius: 15px;
+    padding-left: 15px;
+    margin: -2px;
+}
+
+.navbar-toggler {
+    border-color: rgba(137, 22, 22, 0.9) !important;
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(226, 56, 56, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.dropdown-menu {
+    background-color: rgba(88, 90, 94, 0.9);
+}
+
+.dropdown-item {
+    color: #fff;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: rgba(137, 22, 22, 0.3);
+    color: #fff;
+}
+
+.right-menu .dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
+#main-section {
+    padding-top: 6rem;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+}
+
+/* Index */
+.header-img {
+    background: url('/img/background.jpg') no-repeat center center scroll;
+    padding-top: 4rem;
+    background-size: cover;
+    background-color: darkgray;
+}
+
+.header-text {
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 2px 2px #891616;
+    padding: 5% 0;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.header-text-small {
+    padding: 0;
+}
+
+.header-text img {
+    height: 10rem;
+}
+
+.header-text h1 {
+    font-size: 3.5rem;
+    margin: auto 0 auto 1rem;
+}
+
+@media screen and (max-width: 900px) {
+    .header-text h1 {
+        font-size: 2rem;
+    }
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.active-tw,
+.active-yt,
+.clickable:hover {
+    background-color: darkgray;
+}
+
+.viewers {
+    color: #ff0000;
+    margin: auto 0 !important;
+}
+
+.viewers .feature-icons {
+    font-size: 1rem !important;
+}
+
+.viewers .fa-user {
+    margin-left: 0.25rem;
+}
+
+/* Members */
+.list-group {
+    padding-bottom: 2rem;
+}
+
+.list-group-item {
+    display: flex;
+}
+
+.list-name {
+    margin: 0 auto 0 0;
+    text-align: left;
+}
+
+.member-name {
+    padding-left: 2rem;
+}
+
+.members-icons {
+    margin: auto 0;
+    text-align: right
+}
+
+.members-icons .feature-icons {
+    font-size: 3rem;
+}
+
+.members-icons .fa-twitch,
+.members-icons .fa-youtube {
+    margin-left: 1rem;
+}
+
+.members-icons a {
+    text-decoration: none !important;
+}
+
+.member-head {
+    height: 3rem;
+}
+
+.fa-twitter {
+    color: #55ACEE;
+}
+
+.fa-youtube {
+    color: #ff0000;
+}
+
+.fa-twitch {
+    color: #6441a5;
+}
+
+@media screen and (max-width: 650px) {
+    .members-icons .feature-icons {
+        font-size: 2rem;
+    }
+
+    .member-head {
+        height: 2rem;
+    }
+}
+
+.map-frame {
+    width: 100%;
+    height: 70vh;
+}

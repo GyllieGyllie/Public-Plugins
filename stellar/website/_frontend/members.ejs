@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<% include _globals/head.ejs %>
+
+<body class="d-flex flex-column h-100">
+
+<% include _globals/header.ejs %>
+
+<main role="main" class="flex-shrink-0">
+
+    <div class="header-img">
+        <div class="overlay">
+            <div class='container-fluid'>
+                <div class="row">
+                    <div class="col-md-12 header-text">
+                        <img src="/img/Logo.png">
+                        <h1>Stellar SMP</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-section" class="container">
+
+        <div class="row">
+
+            <div class="col col-12 col-md-12 col-sm-12">
+                <h1>New SMP Members</h1>
+
+                <ul class="list-group">
+                    <% for (var i = 0; i < new_members.length; i++) { %>
+
+                        <li class="list-group-item row">
+
+                            <div class="list-name col-8">
+                                <img src="https://cravatar.eu/helmhead/<%= new_members[i].uuid %>.png" class="member-head">
+                                <span class="member-name">
+                                    <%= new_members[i].name %>
+                                </span>
+                            </div>
+
+                            <div class="members-icons col-4">
+
+                                <% if (new_members[i].twitter && new_members[i].twitter !== "") { %>
+                                    <a href="https://www.twitter.com/<%= new_members[i].twitter %>" target="_blank">
+                                        <i class="feature-icons fab fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                <% } %>
+
+                                <% if (new_members[i].youtube && new_members[i].youtube !== "") { %>
+                                    <a href="<%= new_members[i].youtube %>" target="_blank">
+                                        <i class="feature-icons fab fa-youtube" aria-hidden="true"></i>
+                                    </a>
+                                <% } %>
+
+                                <% if (new_members[i].twitch && new_members[i].twitch !== "") { %>
+                                    <a href="https://www.twitch.tv/<%= new_members[i].twitch %>" target="_blank">
+                                        <i class="feature-icons fab fa-twitch" aria-hidden="true"></i>
+                                    </a>
+                                <% } %>
+
+                            </div>
+                        </li>
+
+                    <% } %>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col col-12 col-md-12 col-sm-12">
+                <h1>SMP Members</h1>
+
+                <ul class="list-group">
+                    <% for (var i = 0; i < members.length; i++) { %>
+
+                        <li class="list-group-item row">
+
+                            <div class="list-name col-8">
+                                <img src="https://cravatar.eu/helmhead/<%= members[i].uuid %>.png" class="member-head">
+                                <span class="member-name">
+                                    <%= members[i].name %>
+                                </span>
+                            </div>
+
+                            <div class="members-icons col-4">
+
+                                <% if (members[i].twitter && members[i].twitter !== "") { %>
+                                    <a href="https://www.twitter.com/<%= members[i].twitter %>" target="_blank">
+                                        <i class="feature-icons fab fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                <% } %>
+
+                                <% if (members[i].youtube && members[i].youtube !== "") { %>
+                                    <a href="<%= members[i].youtube %>" target="_blank">
+                                        <i class="feature-icons fab fa-youtube" aria-hidden="true"></i>
+                                    </a>
+                                <% } %>
+
+                                <% if (members[i].twitch && members[i].twitch !== "") { %>
+                                    <a href="https://www.twitch.tv/<%= members[i].twitch %>" target="_blank">
+                                        <i class="feature-icons fab fa-twitch" aria-hidden="true"></i>
+                                    </a>
+                                <% } %>
+
+                            </div>
+                        </li>
+
+                    <% } %>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<% include _globals/footer.ejs %>
+
+</body>
+
+</html>

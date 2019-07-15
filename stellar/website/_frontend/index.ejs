@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<% include _globals/head.ejs %>
+
+<body class="d-flex flex-column h-100">
+
+<% include _globals/header.ejs %>
+
+<main role="main" class="flex-shrink-0">
+
+    <div class="header-img">
+        <div class="overlay">
+            <div class='container-fluid'>
+                <div class="row">
+                    <div class="col-md-12 header-text">
+                        <img src="/img/Logo.png">
+                        <h1>Stellar SMP</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-section" class="container">
+
+        <h1>Live Members </h1>
+
+        <% if (live_members && live_members.length > 0 ) { %>
+            <div class="row">
+                <div class="col-md-4">
+                    <ul class="list-group">
+
+                        <% for (var i = 0; i < live_members.length; i++) { %>
+
+                        <li id="tw_<%= live_members[i].twitch %>" class="list-group-item row clickable <%= (i === 0) ? "active-tw" : "" %>" onclick="switch_user('<%= live_members[i].twitch %>')">
+                            <div class="list-name col-8">
+                                <img src="https://cravatar.eu/helmhead/<%= live_members[i].uuid %>.png" class="member-head">
+                                <span class="member-name"><%= live_members[i].name %></span>
+                            </div>
+                            <div class="members-icons col-4 viewers">
+                                <span><%= live_members[i].viewers %></span>
+                                <i class="feature-icons fas fa-user" aria-hidden="true"></i>
+                            </div>
+                        </li>
+
+                        <% } %>
+                    </ul>
+                </div>
+                <div class="col-md-8">
+                    <div id="{PLAYER_DIV_ID}"></div>
+                </div>
+            </div>
+        <% } else { %>
+            <h4>No members are currently live</h4>
+        <% } %>
+
+        <br><br>
+
+        <h1>Recent SMP Videos</h1>
+
+        <% if (recent_vids && recent_vids.length > 0 ) { %>
+            <div class="row">
+                <div class="col-md-4">
+                    <ul class="list-group">
+
+                        <% for (var i = 0; i < recent_vids.length; i++) { %>
+
+                            <li id="yt_<%= recent_vids[i].video %>" class="list-group-item clickable <%= (i === 0) ? "active-yt" : "" %>" onclick="switch_video('<%= recent_vids[i].video %>')">
+                                <div class="list-name">
+                                    <img src="https://cravatar.eu/helmhead/<%= recent_vids[i].uuid %>.png" class="member-head">
+                                    <span class="member-name"><%= recent_vids[i].name %></span>
+                                </div>
+                            </li>
+
+                        <% } %>
+                    </ul>
+                </div>
+                <div class="col-md-8">
+                    <iframe id="yt-frame" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        <% } else { %>
+            <h4>No recent videos</h4>
+        <% } %>
+
+    </div>
+</main>
+
+<% include _globals/footer.ejs %>
+
+<script type="text/javascript">
+    var width = $( document ).width() - 30;
+    if (width > 854) {
+        width = 854;
+    }
+    var height = width * 0.56206088992974238875878220140515;
+
+    <% if (live_members && live_members.length > 0 ) { %>
+        const player = new Twitch.Player("{PLAYER_DIV_ID}", { width: width, height: height, channel: "<%= live_members[0].twitch %>"});
+        player.setVolume(0.5);
+
+        function switch_user(user) {
+            player.setChannel(user);
+            $(".active-tw").removeClass("active-tw");
+            $("#tw_" + user).addClass("active-tw");
+        }
+    <% } %>
+
+    <% if (recent_vids && recent_vids.length > 0) { %>
+        var frame = $("#yt-frame");
+        frame.width(width);
+        frame.height(height);
+        frame.attr('src', 'https://www.youtube.com/embed/<%= recent_vids[0].video %>');
+
+        function switch_video(video) {
+            frame.attr('src', "https://www.youtube.com/embed/" + video);
+            $(".active-yt").removeClass("active-yt");
+            $("#yt_" + video).addClass("active-yt");
+        }
+    <% } %>
+</script>
+
+</body>
+
+</html>
