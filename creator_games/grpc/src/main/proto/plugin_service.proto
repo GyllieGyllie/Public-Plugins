@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+// Creates independent Java class files for each top-level message
+option java_multiple_files = true;
+
+// Java package to place generated Java class files in
+option java_package = "net.gylliegyllie.creatorgames.grpc.pluginservice";
+
+service PluginService {
+    rpc DonationStream(stream Message) returns (stream Message) {}
+}
+
+message Message {
+    MessageType type = 1;
+    string streamer = 2;
+
+    // Donations
+    string donator = 3;
+    string message = 4;
+    double amount = 5;
+    Drop drop = 6;
+
+    // Game info
+    int64 start_time = 7;
+    int32 round = 8;
+}
+
+enum MessageType {
+    NEW_DONATION = 0;
+    PLAYER_DIED = 1;
+    START_TIME = 2;
+    ROUND_CHANGE = 3;
+}
+
+enum Drop {
+
+    // Season 2
+    STEAK_2 = 0;
+    BOOK_1 = 1;
+    ARROW_12 = 2;
+    EXP_BOTTLE_8 = 3;
+    GOLDEN_APPLE_1 = 4;
+    TNT_1 = 5;
+    DIAMOND_ORE_1 = 6;
+    GLOWSTONE_BLOCK_1 = 7;
+    STRING_5 = 8;
+    HEALTH = 9;
+    ENCHANT_TABLE_1 = 10;
+    BLAZE_ROD_1 = 11;
+    FORTUNE_2_BOOK_1 = 12;
+    EFF_3_DIA_PICK_1 = 13;
+    MELON_BLOCK_1 = 14;
+    FIRE_ASPECT_BOOK_1 = 15;
+    DEPTH_STRIDER_BOOK_1 = 16;
+    FEATHER_FALLING_BOOK_1 = 17;
+    FIRE = 18;
+    COBBLESTONE = 19;
+    ZOMBIES = 20;
+    DOORS = 21;
+    CREEPER = 22;
+    POISON = 23;
+    TELEPORT = 24;
+    RIP_BOOTS = 25;
+    RIP_HELMET = 26;
+    RIP_PANTS = 27;
+    RIP_CHESTPLATE = 28;
+    OBSIDIAN = 29;
+    RIP_HELD_ITEM = 30;
+
+    // Global
+    FREE_DONATION = 31;
+
+    // Season 3
+    S3_STEAK = 32;
+    S3_OAK = 33;
+    S3_STONE = 34;
+    S3_NEXT = 35;
+    S3_DIAMOND = 36;
+    S3_EARLY = 37;
+    S3_ZOMBIES = 38;
+    S3_CREEPER = 39;
+    S3_SLOW_BLIND = 40;
+    S3_MINING_FAT = 41;
+    S3_FREEZE = 42;
+
+    // Season 4
+    S4_FIREWORK = 43;
+    S4_BREAD = 44;
+    S4_COBBLESTONE = 45;
+    S4_GOLDEN_CARROT = 46;
+    S4_EXP_BOTTLE = 47;
+    S4_WATER_BUCKET = 48;
+    S4_OAK_SAPLING = 49;
+    S4_LAPIS_ORE = 50;
+    S4_BONE = 51;
+    S4_SUGAR_CANE = 52;
+    S4_FEATHER = 53;
+    S4_LAVA_BUCKET = 54;
+    S4_GRASS_BLOCKS = 55;
+    S4_IRON_PICK = 56;
+    S4_SPEED = 57;
+    S4_HASTE = 58;
+    S4_COW_EGG = 59;
+}

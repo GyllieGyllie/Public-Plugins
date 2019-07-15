@@ -1,0 +1,34 @@
+{
+  "development": {
+    "config_id": "development",
+    "production": false,
+    "node_port": 4000,
+    "grpc": {
+      "ip": "127.0.0.1",
+      "service": 4001
+    },
+    "trailer_time": 1561831200000,
+    "season": 4,
+    "paypal_key": "AbSRoFnYMNMPHFpriklnsaTXRewjT0-fzNKOETgTqXZKg1g8_Lq2wc01KvpDzrH6VKwS1PisJEd3gGUJ",
+    "seasons": {
+      "s2": {
+        "name": "Lifeblocks",
+        "date": "Saturday, March 23rd at 12PM EST"
+      },
+      "s3": {
+        "name": "Appease The King",
+        "date": "Saturday, May 4th at 12PM EST"
+      }
+    }
+  },
+  "beta": {
+    "config_id": "beta",
+    "grpc": {
+      "ip": "92.222.76.14",
+      "service": 4002
+    }
+  },
+  "production": {
+    "paypal_key": "Ac9viWH_c50h51m4J5NG_yOWS6C_maHbM82yigDA29K5uEOkdNxJsTGbJ50gvrhBX8Y_4YuUR6iEVI-0"
+  }
+}

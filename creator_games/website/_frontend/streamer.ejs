@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include _globals/head.ejs %>
+
+<body>
+
+<% include _globals/header.ejs %>
+
+<div class="stream">
+    <div id="stream" class="container-fluid">
+    </div>
+</div>
+
+<div class="container-fluid bottom-div">
+
+    <div class="page-header">
+        <h1 id="streamer_name"></h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5 raised">
+            <h2>Raised</h2>
+            <p>This streamer has raised a total of:</p>
+            <p id="streamer_raised" class="largenumb"></p>
+            <p>Thank you to everyone who has donated so far, we really appreciate it!</p>
+        </div>
+        <div class="col-md-5 raised">
+            <h2>Team Member</h2>
+            <p>This streamer is teamed with</p>
+            <p id="streamer_team" class="largenumb"></p>
+        </div>
+    </div>
+    <br/>
+    <div class="container-fluid">
+        <div class="col-sm-2">
+            <nav class="nav-sidebar">
+                <ul class="nav tabs">
+                    <li id="s_positive" class="active"><a href="#positive" data-toggle="tab">Positive</a></li>
+                    <!--<li id="s_negative" class=""><a href="#negative" data-toggle="tab">Negative</a></li>-->
+                    <li id="s_general" class=""><a href="#general" data-toggle="tab">General</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-sm-10 tab-content">
+            <div class="tab-pane active text-style" id="positive">
+                <h2>Positive</h2>
+                <p>
+                    Below you can see all of the packages that have a <strong>positive</strong> effect.
+                </p>
+                <br/>
+                <div id="positive_items">
+                </div>
+            </div>
+            <!--
+            <div class="tab-pane text-style" id="negative">
+                <h2>Negative</h2>
+                <p>
+                    Below you can see all of the packages that have a <strong>negative</strong> effect.
+                </p>
+                <br/>
+                <div id="negative_items">
+                </div>
+            </div>
+            -->
+            <div class="tab-pane text-style" id="general">
+                <h2>General</h2>
+                <p id="general_desc">
+                    Is this streamer dead or a caster? No worries, you can still donate for them.
+                </p>
+                <br/>
+                <div id="general_items">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include _globals/footer.ejs %>
+
+</body>
+
+<% include _globals/scripts.ejs %>
+
+<script src="https://player.twitch.tv/js/embed/v1.js"></script>
+
+<input id="season-id" type="hidden" value="<%= season %>">
+<script src="/controllers/streamer.controller.js"></script>
+
+</html>

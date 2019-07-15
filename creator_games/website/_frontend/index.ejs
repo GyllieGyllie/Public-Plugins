@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include _globals/head.ejs %>
+
+<body>
+
+<% include _globals/header.ejs %>
+
+<header class="header-img">
+    <div class="overlay">
+        <div class='container-fluid'>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="/img/Creator_Games.png" alt="Creator Games" class="logo"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1 no-box-shadow"></div>
+        <div class="col-12 col-md-10">
+            <div class="card row">
+                <div class="col-12 col-md-7 no-box-shadow">
+                    <h2>What is Creator Games?</h2>
+                    <p>
+                        A Minecraft live event for prize money. In which YouTubers play in events ranging from Bedwars, to UHC. The Creator Games was founded, and organized by @NereusShorts & @qqEclipse
+                    </p>
+                </div>
+                <div class="col-md-5 no-box-shadow">
+                    <a href="/event">
+                        <button class="btn" style="margin: 15px 0;">View Competitors</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 no-box-shadow"></div>
+    </div>
+</div>
+
+<div class="container-fluid bottom-div">
+    <div class="row">
+        <div class="col-md-1 no-box-shadow"></div>
+        <div class="col-md-5">
+            <div class="stats stats-number">
+                <h2>Total Donations</h2>
+                <hr>
+                <p id="donation_count">loading...</p>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="stats stats-number">
+                <h2>Total Raised</h2>
+                <hr>
+                <p id="donation_amount">loading...</p>
+            </div>
+        </div>
+        <div class="col-md-1 no-box-shadow"></div>
+    </div>
+</div>
+
+<% include _globals/footer.ejs %>
+
+</body>
+
+<% include _globals/scripts.ejs %>
+
+<script src="/controllers/index.controller.js"></script>
+
+</html>

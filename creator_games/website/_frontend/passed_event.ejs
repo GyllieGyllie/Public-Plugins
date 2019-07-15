@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include _globals/head.ejs %>
+
+<body>
+
+<% include _globals/header.ejs %>
+
+<div class="container-fluid margintop bottom-div">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <h2 id="title">Season <%= season %> - <%= name %></h2>
+                <h4><%= date %></h4>
+            </div>
+        </div>
+    </div>
+    <div id="streamers">
+        <% for (let i = 0; i < streamers.length; i++) { %>
+            <div class="streamer-card">
+                <div class="row">
+                    <div class="col-sm-1">
+                        <img src="https://cravatar.eu/helmavatar/<%= streamers[i].name %>?size=80" class="media-object">
+                    </div>
+                    <div class="col-sm-5">
+                        <b><%= streamers[i].name %></b>
+                    </div>
+                    <div class="col-sm-5">
+                        <b>$<%= streamers[i].raised %></b>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="nobox skull">
+                        <% if (streamers[i].winner) { %>
+                            <img src="/img/winner.png" title="This streamer won the game." class="media-object">
+                        <% } else if (streamers[i].dead) { %>
+                            <img src="/img/skull.png" title="This streamer has died." class="media-object">
+                        <% } else if (streamers[i].caster)  { %>
+                            <img src="/img/mic.png" title="This streamer shoutcasted the event." class="media-object">
+                        <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<% include _globals/footer.ejs %>
+
+</body>
+
+<% include _globals/scripts.ejs %>
+
+</html>

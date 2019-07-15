@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+import "common.proto";
+
+// Creates independent Java class files for each top-level message
+option java_multiple_files = true;
+
+// Java package to place generated Java class files in
+option java_package = "net.gylliegyllie.creatorgames.grpc.wtaservice";
+
+service WTAService {
+    rpc GetGlobalInfo (Season) returns (GetGlobalInfoRes) {}
+
+    rpc GetStreamers (Season) returns (GetStreamersRes) {}
+
+    rpc GetStreamer (GetStreamerReq) returns (GetStreamerRes) {}
+
+    rpc GetItems (Season) returns (GetItemsRes) {}
+
+    rpc GetItem (GetItemReq) returns (GetItemRes) {}
+
+    rpc GetDonation (GetDonationReq) returns (GetDonationRes) {}
+
+    rpc CreatePayment (CreatePaymentReq) returns (CreatePaymentRes) {}
+
+    rpc ApprovedPayment (ApprovedPaymentReq) returns (ApprovedPaymentRes) {}
+}
+
+message GetGlobalInfoRes {
+    bool success = 1;
+    int64 raised = 2;
+    int64 donations = 3;
+    Donation latest = 4;
+    Donation highest = 5;
+}
+
+message GetStreamersRes {
+    bool success = 1;
+    repeated Streamer streamers = 2;
+}
+
+message GetStreamerReq {
+    string name = 1;
+    int32 season = 2;
+}
+
+message GetStreamerRes {
+    bool success = 1;
+    Streamer streamer = 2;
+}
+
+message GetItemsRes {
+    bool success = 1;
+    repeated DonationItem items = 2;
+}
+
+message GetItemReq {
+    int64 id = 1;
+    int32 season = 2;
+}
+
+message GetItemRes {
+    bool success = 1;
+    DonationItem item = 2;
+}
+
+message GetDonationReq {
+    string order_id = 1;
+}
+
+message GetDonationRes {
+    bool success = 1;
+    Donation donation = 2;
+}
+
+message CreatePaymentReq {
+    string streamer = 1;
+    int64 id = 2;
+    string name = 3;
+    string message = 4;
+    int32 amount = 5;
+    int32 season = 6;
+    string ip = 7;
+}
+
+message CreatePaymentRes {
+    bool success = 1;
+    string message = 2;
+    string order_id = 3;
+}
+
+message ApprovedPaymentReq {
+    string order_id = 1;
+}
+
+message ApprovedPaymentRes {
+    bool success = 1;
+}
