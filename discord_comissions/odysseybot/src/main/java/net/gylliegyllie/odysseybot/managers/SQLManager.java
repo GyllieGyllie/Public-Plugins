@@ -245,4 +245,73 @@ public class SQLManager {
 		}
 
 	}
+
+	public void updateTicketDeadline(Ticket ticket) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("UPDATE tickets SET deadline = ? WHERE id = ?;");
+			statement.setString(1, ticket.getDeadline());
+			statement.setLong(2, ticket.getId());
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to update ticket deadline in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
+
+	public void updateTicketExtra(Ticket ticket) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("UPDATE tickets SET extra = ? WHERE id = ?;");
+			statement.setString(1, ticket.getExtra());
+			statement.setLong(2, ticket.getId());
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to update ticket extra in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
+
+	public void updateTicketClaimer(Ticket ticket) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("UPDATE tickets SET claimer = ? WHERE id = ?;");
+			statement.setLong(1, ticket.getClaimer());
+			statement.setLong(2, ticket.getId());
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to update ticket claimer in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
 }

@@ -347,7 +347,7 @@ public class TicketManager {
 
 							ticket.setState(TicketState.OPEN);
 
-							//TODO SQL
+							this.sqlManager.updateTicketState(ticket);
 
 						} else if (event.getReactionEmote().getName().equals(this.bot.denyEmote)) {
 
@@ -368,7 +368,7 @@ public class TicketManager {
 							ticket.setState(TicketState.CLOSED);
 							ticket.delete();
 
-							//TODO SQL
+							this.sqlManager.updateTicketState(ticket);
 
 						} else {
 							event.getChannel().sendMessage(":x: Please use the correct reactions!").queue();
@@ -472,6 +472,8 @@ public class TicketManager {
 								.build())
 								.queue();
 
+						this.sqlManager.updateTicketDeadline(ticket);
+
 					} else if (ticket.getExtra().isEmpty()) {
 
 						ticket.setExtra(event.getMessage().getContentRaw());
@@ -489,6 +491,8 @@ public class TicketManager {
 									message.addReaction(this.bot.acceptEmote).queue();
 									message.addReaction(this.bot.denyEmote).queue();
 								});
+
+						this.sqlManager.updateTicketExtra(ticket);
 					}
 				}
 			}
@@ -514,7 +518,7 @@ public class TicketManager {
 				ticket.getChannel().putPermissionOverride(event.getMember())
 						.setAllow(Permission.MESSAGE_READ).queue();
 
-				//TODO sql
+				this.sqlManager.updateTicketClaimer(ticket);
 
 			}
 		} else if (ticket.getType() == TicketType.COMMISSION && ticket.getState() == TicketState.OPEN
@@ -538,7 +542,7 @@ public class TicketManager {
 				ticket.getChannel().putPermissionOverride(event.getMember())
 						.setAllow(Permission.MESSAGE_READ).queue();
 
-				//TODO sql
+				this.sqlManager.updateTicketClaimer(ticket);
 
 			}
 		}
