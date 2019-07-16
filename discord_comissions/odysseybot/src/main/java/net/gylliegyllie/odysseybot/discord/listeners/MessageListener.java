@@ -6,8 +6,14 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.gylliegyllie.odysseybot.Bot;
 import net.gylliegyllie.odysseybot.discord.commands.ApplyCommand;
 import net.gylliegyllie.odysseybot.discord.commands.CloseCommand;
+import net.gylliegyllie.odysseybot.discord.commands.CloseCommissionCommand;
+import net.gylliegyllie.odysseybot.discord.commands.CommissionCommand;
 import net.gylliegyllie.odysseybot.discord.commands.DiscordCommand;
 import net.gylliegyllie.odysseybot.discord.commands.DoneCommand;
+import net.gylliegyllie.odysseybot.discord.commands.FinalCommand;
+import net.gylliegyllie.odysseybot.discord.commands.FinishedCommand;
+import net.gylliegyllie.odysseybot.discord.commands.PaidCommand;
+import net.gylliegyllie.odysseybot.discord.commands.PicCommand;
 import net.gylliegyllie.odysseybot.discord.commands.QuickDoneCommand;
 import net.gylliegyllie.odysseybot.discord.commands.UpdateInfoCommand;
 import net.gylliegyllie.odysseybot.util.MessageUtil;
@@ -32,10 +38,16 @@ public class MessageListener extends ListenerAdapter {
 
 	public void init() {
 		this.commands.put("apply", new ApplyCommand());
-		this.commands.put("updateinfo", new UpdateInfoCommand());
+		this.commands.put("updateinfo", new UpdateInfoCommand(this.bot));
 		this.commands.put("close", new CloseCommand(this.bot));
 		this.commands.put("done", new DoneCommand(this.bot));
 		this.commands.put("quickdone", new QuickDoneCommand(this.bot));
+		this.commands.put("comm", new CommissionCommand(this.bot));
+		this.commands.put("paid", new PaidCommand(this.bot));
+		this.commands.put("finished", new FinishedCommand(this.bot));
+		this.commands.put("pic", new PicCommand(this.bot));
+		this.commands.put("final", new FinalCommand(this.bot));
+		this.commands.put("closecom", new CloseCommissionCommand(this.bot));
 	}
 
 	@Override

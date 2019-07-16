@@ -16,9 +16,12 @@ public class Configuration extends BaseConfiguration {
 	private Long ownerRole = -1L;
 
 	private Long ticketRequestChannel = -1L;
+	private Long commissionChannel = -1L;
+	private Long reviewsChannel = -1L;
 
 	private Long ticketsCategory = -1L;
 	private Long supportCategory = -1L;
+	private Long pricingCategory = -1L;
 
 	public String getBotKey() {
 		return this.botKey;
@@ -56,11 +59,23 @@ public class Configuration extends BaseConfiguration {
 		return this.ticketRequestChannel;
 	}
 
+	public Long getCommissionChannel() {
+		return this.commissionChannel;
+	}
+
+	public Long getReviewsChannel() {
+		return this.reviewsChannel;
+	}
+
 	public Long getTicketsCategory() {
 		return this.ticketsCategory;
 	}
 
 	public Long getSupportCategory() {
 		return this.supportCategory;
+	}
+
+	public Long getPricingCategory() {
+		return this.pricingCategory;
 	}
 }

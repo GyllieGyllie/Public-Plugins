@@ -69,6 +69,25 @@ public class ReactionListener extends ListenerAdapter {
 			} else {
 				event.getReaction().removeReaction(event.getUser()).queue();
 			}
+
+		} else if (event.getChannel().equals(this.bot.getBot().commissionChannel)) {
+
+			boolean foundOur = false;
+
+			for (User user : event.getReaction().getUsers()) {
+				if (user.isBot()) {
+					if (this.bot.getBot().selfMember.getUser().getIdLong() == user.getIdLong()) {
+						foundOur = true;
+					}
+				}
+			}
+
+			if (foundOur) {
+				ticketManager.handleReaction(event, event.getMessageIdLong());
+			} else {
+				event.getReaction().removeReaction(event.getUser()).queue();
+			}
+
 		}
 	}
 }

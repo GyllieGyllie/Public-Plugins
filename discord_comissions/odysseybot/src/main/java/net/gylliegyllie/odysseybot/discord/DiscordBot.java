@@ -36,9 +36,12 @@ public class DiscordBot {
 	public final Role supportRole;
 
 	public final TextChannel ticketRequestChannel;
+	public final TextChannel commissionChannel;
+	public final TextChannel reviewChannel;
 
 	public final Category ticketsCategory;
 	public final Category supportCategory;
+	public final Category pricingCategory;
 
 	public final Emote odysseyEmote;
 	public final Emote exclusiveEmote;
@@ -58,7 +61,7 @@ public class DiscordBot {
 		this.messageListener = new MessageListener(bot);
 
 		this.jda = new JDABuilder(configuration.getBotKey())
-				.addEventListener(messageListener)
+				.addEventListener(this.messageListener)
 				.addEventListener(new ReactionListener(bot))
 				.build();
 
@@ -81,9 +84,12 @@ public class DiscordBot {
 		this.supportRole = this.jda.getRoleById(configuration.getSupportRole());
 
 		this.ticketRequestChannel = this.jda.getTextChannelById(configuration.getTicketRequestChannel());
+		this.commissionChannel = this.jda.getTextChannelById(configuration.getCommissionChannel());
+		this.reviewChannel = this.jda.getTextChannelById(configuration.getReviewsChannel());
 
 		this.ticketsCategory = this.jda.getCategoryById(configuration.getTicketsCategory());
 		this.supportCategory = this.jda.getCategoryById(configuration.getSupportCategory());
+		this.pricingCategory = this.jda.getCategoryById(configuration.getPricingCategory());
 
 		this.odysseyEmote = guild.getEmotes().stream().filter(e -> e.getName().equals("odyssey")).findFirst().orElse(null);
 		this.exclusiveEmote = guild.getEmotes().stream().filter(e -> e.getName().equals("exclusive")).findFirst().orElse(null);
