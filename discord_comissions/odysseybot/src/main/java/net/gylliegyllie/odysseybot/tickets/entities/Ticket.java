@@ -75,6 +75,7 @@ public class Ticket {
 		this.price = resultSet.getInt("price");
 		this.started = resultSet.getBoolean("started");
 		this.completed = resultSet.getBoolean("completed");
+		this.image = resultSet.getString("image");
 
 		this.managerRating = resultSet.getInt("review_manager");
 		this.builderRating = resultSet.getInt("review_builder");
