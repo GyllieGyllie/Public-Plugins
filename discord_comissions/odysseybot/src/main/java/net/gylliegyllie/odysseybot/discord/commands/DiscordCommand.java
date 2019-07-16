@@ -7,8 +7,12 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public abstract class DiscordCommand {
+
+	protected final Pattern IMGUR = Pattern.compile("[http://|https://]*imgur.com/[gallery|a]+/[a-zA-Z0-9]+");
+	protected final Pattern MAIL = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
 
 	private final boolean privateCompatible;
 	private final List<Role> roles = new ArrayList<>();

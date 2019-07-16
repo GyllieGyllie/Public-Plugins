@@ -14,11 +14,8 @@ public class UpdateInfoCommand extends DiscordCommand {
 
 	private final Logger logger = LoggerFactory.getLogger(UpdateInfoCommand.class);
 
-	private final Pattern IMGUR = Pattern.compile("[http://|https://]*imgur.com/gallery/[a-zA-Z0-9]+");
-	private final Pattern MAIL = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
-
-	public UpdateInfoCommand() {
-		super(false);
+	public UpdateInfoCommand(Bot bot) {
+		super(false, bot.getBot().builderRole, bot.getBot().terraformerRole);
 	}
 
 	@Override
@@ -36,7 +33,7 @@ public class UpdateInfoCommand extends DiscordCommand {
 				String portfolio = args[1];
 
 				if (!this.IMGUR.matcher(portfolio).matches()) {
-					MessageUtil.sendMessage(event, "Invalid link provided! Please provide an Imgur galery link!", true);
+					MessageUtil.sendMessage(event, "Invalid link provided! Please provide an Imgur gallery link!", true);
 					return;
 				}
 

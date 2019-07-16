@@ -77,6 +77,7 @@ public class Bot {
 			logger.info("Starting shutdown!");
 
 			this.bot.shutdown();
+			this.ticketManager.shutdown();
 
 		}));
 
