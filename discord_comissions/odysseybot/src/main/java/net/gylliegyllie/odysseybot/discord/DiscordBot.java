@@ -54,6 +54,11 @@ public class DiscordBot {
 	public final String terraformerEmote = "\uD83C\uDFD4";
 	public final String acceptEmote = "✅";
 	public final String denyEmote = "❌";
+	public final String oneEmote = "1⃣";
+	public final String twoEmote = "2⃣";
+	public final String threeEmote = "3⃣";
+	public final String fourEmote = "4⃣";
+	public final String fiveEmote = "5⃣";
 
 	private MessageListener messageListener;
 

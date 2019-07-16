@@ -28,6 +28,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 import static net.gylliegyllie.odysseybot.tickets.entities.TicketType.COMMISSION;
@@ -686,7 +687,7 @@ public class TicketManager {
 								.setDescription("**" + owner.getAsMention() + ", we're happy to announce that your commission is ready to continue!**\n" +
 										event.getMember().getAsMention() + " has claimed your commission, and would love to work with you.\n" +
 										"\n" +
-										"Portfolio: [here](" + portfolio + ")\n" +
+										"Portfolio: [Here](" + portfolio + ")\n" +
 										"\n" +
 										"Click " + this.bot.acceptEmote + " to continue with this Builder\n" +
 										"Click " + this.bot.denyEmote + " to find a new Builder\n" +
@@ -729,7 +730,7 @@ public class TicketManager {
 					ticket.getChannel().sendMessage(new EmbedBuilder()
 							.setColor(new Color(33,119,254))
 							.setTitle("Odyssey Ticket System")
-							.setDescription("Before the Commission can start, we will need to take 50% of the payment ($" + (ticket.getPrice() / 2) + ")." +
+							.setDescription("Before the Commission can start, we will need to take 50% of the payment ($" + (((double) ticket.getPrice()) / 2) + ")." +
 									" Please send the money to " + paypal + " via the Friends & Family option.\n" +
 									"\n" +
 									"Once this has been done, the Manager can confirm so and the commission can begin.\n")
@@ -788,7 +789,7 @@ public class TicketManager {
 					ticket.getChannel().sendMessage(new EmbedBuilder()
 							.setColor(new Color(33,119,254))
 							.setTitle("Odyssey Ticket System")
-							.setDescription("Please send the other 50% of the money ($" + (ticket.getPrice() / 2) + ") to " + paypal + " via the Friends & Family option.\n" +
+							.setDescription("Please send the other 50% of the money ($" + (((double) ticket.getPrice()) / 2) + ") to " + paypal + " via the Friends & Family option.\n" +
 									"\n" +
 									manager.getAsMention() + " Please react to this message once the money has been sent.")
 							.build())
@@ -855,6 +856,7 @@ public class TicketManager {
 				break;
 
 			case COMPLETED:
+
 				if (event.getReactionEmote().getEmote().equals(this.bot.exclusiveEmote)) {
 
 					ticket.setState(TicketState.CLOSED);
@@ -872,7 +874,163 @@ public class TicketManager {
 							});
 
 					ticket.delete();
+
+				} else if (event.getReactionEmote().getEmote().equals(this.bot.odysseyEmote)) {
+
+					ticket.setState(TicketState.RATE_MANAGER);
+					this.sqlManager.updateTicketState(ticket);
+
+					ticket.getChannel().sendMessage(new EmbedBuilder()
+							.setColor(new Color(33,119,254))
+							.setTitle("Odyssey Ticket System")
+							.setDescription("How would you rate your manager’s service on a scale of 1-5?\n" +
+									"\n" +
+									"*Please react with your answer.*")
+							.build())
+							.queue(this::addNumberEmotes);
+
 				}
+
+				break;
+
+			case RATE_MANAGER:
+
+				int rating = this.getRating(event);
+
+				if (rating == -1) {
+					event.getChannel().sendMessage(":x: Please use the correct reactions!").queue();
+					event.getReaction().removeReaction(event.getUser()).queue();
+					return;
+				}
+
+				ticket.setState(TicketState.RATE_BUILD);
+				ticket.setManagerRating(rating);
+
+				this.sqlManager.updateTicketState(ticket);
+				this.sqlManager.updateManagerRating(ticket);
+
+				event.getChannel().getMessageById(event.getMessageIdLong()).queue(msg -> msg.delete().queue());
+				ticket.getChannel().sendMessage(new EmbedBuilder()
+						.setColor(new Color(33,119,254))
+						.setTitle("Odyssey Ticket System")
+						.setDescription("How would you rate your builder’s service on a scale of 1-5?\n" +
+								"\n" +
+								"*Please react with your answer.*")
+						.build())
+						.queue(this::addNumberEmotes);
+
+				break;
+
+			case RATE_BUILD:
+
+				rating = this.getRating(event);
+
+				if (rating == -1) {
+					event.getChannel().sendMessage(":x: Please use the correct reactions!").queue();
+					event.getReaction().removeReaction(event.getUser()).queue();
+					return;
+				}
+
+				ticket.setState(TicketState.RATE_IMAGE);
+				ticket.setBuilderRating(rating);
+
+				this.sqlManager.updateTicketState(ticket);
+				this.sqlManager.updateBuilderRating(ticket);
+
+				event.getChannel().getMessageById(event.getMessageIdLong()).queue(msg -> msg.delete().queue());
+				ticket.getChannel().sendMessage(new EmbedBuilder()
+						.setColor(new Color(33,119,254))
+						.setTitle("Odyssey Ticket System")
+						.setDescription("Would you like your build to be kept private, or may we use images of it in your review?\n" +
+								"\n" +
+								"Click " + this.bot.acceptEmote + " if we can use images of it.\n" +
+								"Click " + this.bot.denyEmote + " if we can not use images of it.")
+						.build())
+						.queue(msg -> {
+							msg.addReaction(this.bot.acceptEmote).queue();
+							msg.addReaction(this.bot.denyEmote).queue();
+						});
+
+				break;
+
+			case RATE_IMAGE:
+
+				if (event.getReactionEmote().getName().equals(this.bot.acceptEmote)) {
+
+					ticket.setShowPics(true);
+
+				} else if (event.getReactionEmote().getName().equals(this.bot.denyEmote)) {
+
+					ticket.setShowPics(false);
+
+				} else {
+					event.getChannel().sendMessage(":x: Please use the correct reactions!").queue();
+					event.getReaction().removeReaction(event.getUser()).queue();
+					return;
+				}
+
+				ticket.setState(TicketState.CLOSED);
+				this.sqlManager.updateTicketState(ticket);
+				this.sqlManager.updateShowPics(ticket);
+
+				event.getChannel().getMessageById(event.getMessageIdLong()).queue(msg -> msg.delete().queue());
+				ticket.getChannel().sendMessage(new EmbedBuilder()
+						.setColor(new Color(33,119,254))
+						.setTitle("Odyssey Ticket System")
+						.setDescription("Thank you very much for filling in our questionnaire!\n" +
+								"\n" +
+								"If you would like future updates of Odyssey, you can follow us on Twitter [here](https://twitter.com/odysseybuilds)!\n" +
+								"\n" +
+								"This ticket will be automatically closed in 10 minutes, or react to this message to automatically close it.\n")
+						.build())
+						.queue(msg -> {
+							msg.addReaction(this.bot.odysseyEmote).queue();
+						});
+
+				ticket.delete();
+
+				StringBuilder builder = new StringBuilder("**Review by ").append(this.bot.getJda().getUserById(ticket.getOwner()).getAsMention()).append("**")
+						.append("\n\n")
+						.append("**Manager Rating (").append(this.bot.getJda().getUserById(ticket.getClaimer()).getAsMention()).append("): **");
+
+				for (int t = 1; t <= ticket.getManagerRating(); t++) {
+					builder.append(":star:");
+				}
+
+				builder.append("\n\n")
+					.append("**Builders Rating:** ");
+
+				for (int t = 1; t <= ticket.getBuilderRating(); t++) {
+					builder.append(":star:");
+				}
+
+				builder.append("\n");
+
+				StringJoiner joiner = new StringJoiner(", ");
+
+				for (Long b : ticket.getBuilders()) {
+					User user = this.bot.getJda().getUserById(b);
+
+					if (user != null) {
+						joiner.add(user.getAsMention());
+					}
+				}
+
+				builder.append(joiner.toString());
+
+				if (ticket.isShowPics()) {
+					builder.append("\n\n").append("**Images: **").append(ticket.getImage());
+				}
+
+				this.bot.reviewChannel.sendMessage(new EmbedBuilder()
+						.setColor(new Color(33,119,254))
+						.setTitle("Odyssey Ticket System")
+						.setDescription(builder.toString())
+						.build())
+						.queue();
+
+				break;
+
 		}
 	}
 
@@ -1123,6 +1281,30 @@ public class TicketManager {
 				.setAllow(Permission.EMPTY_PERMISSIONS)
 				.setDeny(Permission.MESSAGE_READ)
 				.queue();
+	}
+
+	private void addNumberEmotes(Message msg) {
+		msg.addReaction(this.bot.oneEmote).queue();
+		msg.addReaction(this.bot.twoEmote).queue();
+		msg.addReaction(this.bot.threeEmote).queue();
+		msg.addReaction(this.bot.fourEmote).queue();
+		msg.addReaction(this.bot.fiveEmote).queue();
+	}
+
+	private Integer getRating(GuildMessageReactionAddEvent event) {
+		if (event.getReactionEmote().getName().equals(this.bot.oneEmote)) {
+			return 1;
+		} else if (event.getReactionEmote().getName().equals(this.bot.twoEmote)) {
+			return 2;
+		} else if (event.getReactionEmote().getName().equals(this.bot.threeEmote)) {
+			return 3;
+		} else if (event.getReactionEmote().getName().equals(this.bot.fourEmote)) {
+			return 4;
+		} else if (event.getReactionEmote().getName().equals(this.bot.fiveEmote)) {
+			return 5;
+		}
+
+		return -1;
 	}
 
 	private void startIdleThread() {
