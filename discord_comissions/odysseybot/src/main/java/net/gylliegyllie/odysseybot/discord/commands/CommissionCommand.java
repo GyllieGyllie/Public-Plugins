@@ -18,22 +18,14 @@ public class CommissionCommand extends DiscordCommand {
 
 	@Override
 	public void runCommand(MessageReceivedEvent event, String command, String[] args) {
-
-		if (event.getChannel().getType() != ChannelType.TEXT) {
-			return;
-		}
-
-		TextChannel channel = (TextChannel) event.getChannel();
-
-		if (!channel.getName().startsWith("ticket_")) {
-			return;
-		}
+		if (!this.verifyInTicket(event)) return;
 
 		if (args.length == 0) {
-			MessageUtil.sendMessage(event, String.format("Use `%scomm <price|quote> -d <details> -dl <deadline>` to set a price or start the quoting process!", Bot.PREFIX), true);
+			MessageUtil.sendDM(event.getAuthor(), String.format("Use `%scomm <price|quote> -d <details> -dl <deadline>` to set a price or start the quoting process!", Bot.PREFIX));
 			return;
 		}
 
+		TextChannel channel = event.getTextChannel();
 		Long ticketID = Long.valueOf(channel.getName().split("_")[1]);
 
 		String current = "";
@@ -95,29 +87,22 @@ public class CommissionCommand extends DiscordCommand {
 		}
 
 		if (details.isEmpty()) {
-			MessageUtil.sendMessage(event, "Please add the project details using -d <details>", true);
+			MessageUtil.sendDM(event.getAuthor(), "Please add the project details using -d <details>");
 			return;
 		} else if (deadline.isEmpty()) {
-			MessageUtil.sendMessage(event, "Please add the project deadline using -dl <deadline>", true);
+			MessageUtil.sendDM(event.getAuthor(), "Please add the project deadline using -dl <deadline>");
 			return;
 		}
 
 		if (args[0].equalsIgnoreCase("quote")) {
 
+			this.bot.getTicketManager().startQuoting(ticketID, details, deadline, type);
+
 		} else {
 
-			String sValue = args[0];
+			Integer price = this.getPrice(event, args[0]);
 
-			if (sValue.startsWith("$")) {
-				sValue = sValue.substring(1);
-			}
-
-			Integer price;
-
-			try {
-				price = Integer.valueOf(sValue);
-			} catch (NumberFormatException e) {
-				MessageUtil.sendMessage(event, "Invalid price amount entered!", true);
+			if (price <= 0) {
 				return;
 			}
 

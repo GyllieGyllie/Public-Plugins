@@ -18,15 +18,7 @@ public class CloseCommissionCommand extends DiscordCommand {
 	@Override
 	public void runCommand(MessageReceivedEvent event, String command, String[] args) {
 
-		if (event.getChannel().getType() != ChannelType.TEXT) {
-			return;
-		}
-
-		TextChannel channel = (TextChannel) event.getChannel();
-
-		if (!channel.getName().startsWith("ticket_")) {
-			return;
-		}
+		if (!this.verifyInTicket(event)) return;
 
 		this.bot.getTicketManager().closeManager(Long.valueOf(event.getChannel().getName().split("_")[1]));
 

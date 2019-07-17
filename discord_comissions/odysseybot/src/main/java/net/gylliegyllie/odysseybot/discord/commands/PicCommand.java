@@ -20,15 +20,7 @@ public class PicCommand extends DiscordCommand {
 	@Override
 	public void runCommand(MessageReceivedEvent event, String command, String[] args) {
 
-		if (event.getChannel().getType() != ChannelType.TEXT) {
-			return;
-		}
-
-		TextChannel channel = (TextChannel) event.getChannel();
-
-		if (!channel.getName().startsWith("ticket_")) {
-			return;
-		}
+		if (!this.verifyInTicket(event)) return;
 
 		if (args.length == 0) {
 			MessageUtil.sendMessage(event, String.format("Please use `%spic <imgurlink>` to set the images.", Bot.PREFIX), true);

@@ -11,7 +11,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class SQLManager {
 
@@ -52,7 +51,7 @@ public class SQLManager {
 
 			statement = connection.prepareStatement("create table if not exists tickets (" +
 					"id bigint not null primary key," +
-					"creation_time timestamp not null," +
+					"creation_time bigint not null," +
 					"owner bigint not null," +
 					"channel_id bigint not null default -1," +
 					"commission_channel_id bigint not null default -1," +
@@ -63,9 +62,11 @@ public class SQLManager {
 					"deadline text not null default ''," +
 					"extra text not null default '', " +
 					"claimer bigint not null default -1," +
+					"claim_time bigint not null DEFAULT -1," +
 					"price int not null default -1," +
 					"final_description text not null default ''," +
 					"final_deadline text not null default ''," +
+					"quote_message bigint not null default -1," +
 					"commission_message bigint not null default -1," +
 					"started boolean not null default false," +
 					"completed boolean not null default false," +
@@ -87,6 +88,13 @@ public class SQLManager {
 					"ticket_id bigint not null," +
 					"disallowed boolean not null default false," +
 					"unfinished boolean not null default false," +
+					"claim_time bigint not null default -1," +
+					"primary key (staff_id, ticket_id));");
+			statement.execute();
+
+			statement = connection.prepareStatement("create table if not exists unfinished_managers (" +
+					"staff_id bigint not null," +
+					"ticket_id bigint not null," +
 					"primary key (staff_id, ticket_id));");
 			statement.execute();
 
@@ -191,7 +199,7 @@ public class SQLManager {
 		return "";
 	}
 
-	public long insertNewTicket(Long time, Long owner) throws SQLException {
+	public long insertNewTicket(Long owner) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -202,7 +210,7 @@ public class SQLManager {
 
 			statement = connection.prepareStatement("INSERT INTO tickets (id, creation_time, owner) VALUES (?, ?, ?);");
 			statement.setLong(1, this.nextID);
-			statement.setTimestamp(2, new Timestamp(time));
+			statement.setLong(2, System.currentTimeMillis());
 			statement.setLong(3, owner);
 
 			statement.execute();
@@ -247,7 +255,7 @@ public class SQLManager {
 			connection = this.getConnection();
 
 			statement = connection.prepareStatement("UPDATE tickets SET commission_channel_id = ? WHERE id = ?;");
-			statement.setLong(1, ticket.getCommissionChannel().getIdLong());
+			statement.setLong(1, ticket.getCommissionChannel() == null ? -1L : ticket.getCommissionChannel().getIdLong());
 			statement.setLong(2, ticket.getId());
 
 			statement.execute();
@@ -407,9 +415,10 @@ public class SQLManager {
 
 			connection = this.getConnection();
 
-			statement = connection.prepareStatement("UPDATE tickets SET claimer = ? WHERE id = ?;");
-			statement.setLong(1, ticket.getClaimer());
-			statement.setLong(2, ticket.getId());
+			statement = connection.prepareStatement("UPDATE tickets SET claimer = ?, claim_time = ? WHERE id = ?;");
+			statement.setLong(1, ticket.getClaimer() == null ? -1L : ticket.getClaimer());
+			statement.setLong(2, System.currentTimeMillis());
+			statement.setLong(3, ticket.getId());
 
 			statement.execute();
 
@@ -462,6 +471,29 @@ public class SQLManager {
 
 		} catch (Exception e) {
 			logger.error("Failed to update ticket final info in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
+
+	public void updateTicketQuoteMessage(Ticket ticket) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("UPDATE tickets SET quote_message = ? WHERE id = ?;");
+			statement.setLong(1, ticket.getQuoteMessage());
+			statement.setLong(2, ticket.getId());
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to update ticket quote message in db!", e);
 		} finally {
 			this.close(connection, statement, null);
 		}
@@ -537,6 +569,53 @@ public class SQLManager {
 
 	}
 
+	public void addQuote(Ticket ticket, Long builder, Integer price) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("INSERT INTO quotes (staff_id, ticket_id, price) VALUES (?, ?, ?) ON CONFLICT(staff_id, ticket_id) DO UPDATE SET price = ?;");
+			statement.setLong(1, builder);
+			statement.setLong(2, ticket.getId());
+			statement.setInt(3, price);
+			statement.setInt(4, price);
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to insert quote in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
+
+	public void clearQuotes(Ticket ticket) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("DELETE FROM quotes WHERE ticket_id = ?;");
+			statement.setLong(1, ticket.getId());
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to delete quotes in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
+
 	public void addBuilder(Ticket ticket, Long builder) {
 
 		Connection connection = null;
@@ -546,9 +625,12 @@ public class SQLManager {
 
 			connection = this.getConnection();
 
-			statement = connection.prepareStatement("INSERT INTO builders (staff_id, ticket_id) VALUES (?, ?);");
+			statement = connection.prepareStatement("INSERT INTO builders (staff_id, ticket_id, claim_time) VALUES (?, ?, ?) ON CONFLICT(staff_id, ticket_id) DO UPDATE SET unfinished = ?, claim_time = ?;");
 			statement.setLong(1, builder);
 			statement.setLong(2, ticket.getId());
+			statement.setLong(3, System.currentTimeMillis());
+			statement.setBoolean(4, false);
+			statement.setLong(5, System.currentTimeMillis());
 
 			statement.execute();
 
@@ -706,6 +788,52 @@ public class SQLManager {
 
 		} catch (Exception e) {
 			logger.error("Failed to update ticket show pics in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
+
+	public void insertUnfinishedManager(Ticket ticket, Long manager) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("INSERT INTO unfinished_managers(ticket_id, staff_id) VALUES (?, ?);");
+			statement.setLong(1, ticket.getId());
+			statement.setLong(2, manager);
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to insert unfinished manager in db!", e);
+		} finally {
+			this.close(connection, statement, null);
+		}
+
+	}
+
+	public void removeUnfinishedManager(Ticket ticket, Long manager) {
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+
+			connection = this.getConnection();
+
+			statement = connection.prepareStatement("DELETE FROM unfinished_managers WHERE ticket_id = ? AND staff_id = ?;");
+			statement.setLong(1, ticket.getId());
+			statement.setLong(2, manager);
+
+			statement.execute();
+
+		} catch (Exception e) {
+			logger.error("Failed to delete unfinished manager in db!", e);
 		} finally {
 			this.close(connection, statement, null);
 		}
