@@ -5,7 +5,9 @@ import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +21,7 @@ public class Ticket {
 	private TextChannel channel;
 	private TextChannel commissionChannel;
 
+	private Long quoteMessage = -1L;
 	private Long commissionMessage = -1L;
 
 	private TicketState state = TicketState.CREATED;
@@ -41,6 +44,7 @@ public class Ticket {
 	private Integer builderRating = -1;
 	private Boolean showPics = false;
 
+	private Map<Long, Integer> quotes = new HashMap<>();
 	private Set<Long> builders = new HashSet<>();
 
 	private Long lastEdit = System.currentTimeMillis();
@@ -56,9 +60,10 @@ public class Ticket {
 
 	public Ticket(ResultSet resultSet) throws SQLException {
 		this.id = resultSet.getLong("id");
-		this.creationTime = resultSet.getTimestamp("creation_time").getTime();
+		this.creationTime = resultSet.getLong("creation_time");
 		this.owner = resultSet.getLong("owner");
 
+		this.quoteMessage = resultSet.getLong("quote_message");
 		this.commissionMessage = resultSet.getLong("commission_message");
 
 		this.state = TicketState.valueOf(resultSet.getString("state"));
@@ -108,6 +113,14 @@ public class Ticket {
 
 	public TextChannel getCommissionChannel() {
 		return this.commissionChannel;
+	}
+
+	public void setQuoteMessage(Long id) {
+		this.quoteMessage = id;
+	}
+
+	public Long getQuoteMessage() {
+		return this.quoteMessage;
 	}
 
 	public void setCommissionMessage(Long id) {
@@ -229,6 +242,14 @@ public class Ticket {
 
 	public String getImage() {
 		return this.image;
+	}
+
+	public void addQuote(Long builder, Integer quote) {
+		this.quotes.put(builder, quote);
+	}
+
+	public Map<Long, Integer> getQuotes() {
+		return this.quotes;
 	}
 
 	public void addBuilder(Long builder) {

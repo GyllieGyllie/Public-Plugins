@@ -1,8 +1,11 @@
 package net.gylliegyllie.odysseybot.discord.commands;
 
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.gylliegyllie.odysseybot.util.MessageUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,5 +44,37 @@ public abstract class DiscordCommand {
 		}
 
 		return false;
+	}
+
+	boolean verifyInTicket(MessageReceivedEvent event) {
+		if (event.getChannel().getType() != ChannelType.TEXT) {
+			return false;
+		}
+
+		TextChannel channel = (TextChannel) event.getChannel();
+
+		if (!channel.getName().startsWith("ticket_")) {
+			return false;
+		}
+
+		return true;
+	}
+
+	Integer getPrice(MessageReceivedEvent event, String sValue) {
+
+		if (sValue.startsWith("$")) {
+			sValue = sValue.substring(1);
+		}
+
+		Integer price;
+
+		try {
+			price = Integer.valueOf(sValue);
+		} catch (NumberFormatException e) {
+			MessageUtil.sendMessage(event, "Invalid price amount entered!", true);
+			return -1;
+		}
+
+		return price;
 	}
 }

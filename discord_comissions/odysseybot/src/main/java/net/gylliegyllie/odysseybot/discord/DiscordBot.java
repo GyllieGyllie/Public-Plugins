@@ -16,6 +16,7 @@ import net.gylliegyllie.odysseybot.discord.commands.CloseCommand;
 import net.gylliegyllie.odysseybot.discord.commands.DoneCommand;
 import net.gylliegyllie.odysseybot.discord.commands.QuickDoneCommand;
 import net.gylliegyllie.odysseybot.discord.commands.UpdateInfoCommand;
+import net.gylliegyllie.odysseybot.discord.listeners.LeaveListener;
 import net.gylliegyllie.odysseybot.discord.listeners.MessageListener;
 import net.gylliegyllie.odysseybot.discord.listeners.ReactionListener;
 
@@ -38,6 +39,7 @@ public class DiscordBot {
 	public final TextChannel ticketRequestChannel;
 	public final TextChannel commissionChannel;
 	public final TextChannel reviewChannel;
+	public final TextChannel importantChannel;
 
 	public final Category ticketsCategory;
 	public final Category supportCategory;
@@ -68,6 +70,7 @@ public class DiscordBot {
 		this.jda = new JDABuilder(configuration.getBotKey())
 				.addEventListener(this.messageListener)
 				.addEventListener(new ReactionListener(bot))
+				.addEventListener(new LeaveListener(bot))
 				.build();
 
 		this.jda.awaitReady();
@@ -91,6 +94,7 @@ public class DiscordBot {
 		this.ticketRequestChannel = this.jda.getTextChannelById(configuration.getTicketRequestChannel());
 		this.commissionChannel = this.jda.getTextChannelById(configuration.getCommissionChannel());
 		this.reviewChannel = this.jda.getTextChannelById(configuration.getReviewsChannel());
+		this.importantChannel = this.jda.getTextChannelById(configuration.getImportantChannel());
 
 		this.ticketsCategory = this.jda.getCategoryById(configuration.getTicketsCategory());
 		this.supportCategory = this.jda.getCategoryById(configuration.getSupportCategory());

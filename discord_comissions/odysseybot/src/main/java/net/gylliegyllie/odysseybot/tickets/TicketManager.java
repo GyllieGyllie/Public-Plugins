@@ -28,8 +28,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static net.gylliegyllie.odysseybot.tickets.entities.TicketType.COMMISSION;
 import static net.gylliegyllie.odysseybot.tickets.entities.TicketType.SUPPORT;
@@ -85,6 +87,21 @@ public class TicketManager {
 				}
 			}
 
+			this.sqlManager.close(null, statement, resultSet);
+
+			statement = connection.prepareStatement("SELECT * FROM quotes;");
+
+			resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+				Long ticketID = resultSet.getLong("ticket_id");
+				Ticket ticket = this.tickets.stream().filter(t -> t.getId().equals(ticketID)).findFirst().orElse(null);
+
+				if (ticket != null) {
+					ticket.addQuote(resultSet.getLong("staff_id"), resultSet.getInt("price"));
+				}
+			}
+
 			logger.info(String.format("Loaded %s tickets from the database!", this.tickets.size()));
 
 		} finally {
@@ -102,13 +119,27 @@ public class TicketManager {
 		}
 	}
 
+	public Ticket getTicket(Long id) {
+		return this.tickets.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+	}
+
+	public List<Ticket> getUnfinishedTicketForStaff(Long staffID) {
+		return this.tickets.stream()
+				// First get all tickets where they were first payed
+				.filter(t -> t.getState().ordinal() > TicketState.AWAITING_FIRST_PAYMENT.ordinal())
+				// Get all tickets not closed yet
+				.filter(t -> t.getState().ordinal() < TicketState.RATE_MANAGER.ordinal())
+				// Get tickets related to this staff
+				.filter(t -> t.getClaimer().equals(staffID) || t.getBuilders().contains(staffID))
+				.collect(Collectors.toList());
+	}
+
 	public void createTicket(Member member) {
 
-		Long time = System.currentTimeMillis();
 		Long id;
 
 		try {
-			id = this.sqlManager.insertNewTicket(time, member.getUser().getIdLong());
+			id = this.sqlManager.insertNewTicket(member.getUser().getIdLong());
 		} catch (Exception e) {
 			logger.error("", e);
 			MessageUtil.sendDM(member.getUser(), ":x: Something went wrong creating a new ticket, try again later.");
@@ -144,6 +175,8 @@ public class TicketManager {
 								message.addReaction(this.bot.odysseyEmote).queue();
 								message.addReaction(this.bot.exclusiveEmote).queue();
 							});
+
+					textChannel.sendMessage(member.getUser().getAsMention()).queue(msg -> msg.delete().queueAfter(1, TimeUnit.SECONDS));
 
 					logger.info(String.format("User %s created a new ticket %s!", member.getUser().getName(), "ticket_" + ticket.getId()));
 				});
@@ -225,7 +258,7 @@ public class TicketManager {
 
 		Ticket ticket = this.tickets.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
 
-		if (ticket != null && ticket.getType() == COMMISSION && ticket.getState().ordinal() >= TicketState.AWAITING_BUILDER.ordinal()) {
+		if (ticket != null && ticket.getType() == COMMISSION && ticket.getState().ordinal() >= TicketState.OPEN.ordinal()) {
 			TextChannel channel = ticket.getChannel();
 
 			if (channel != null) {
@@ -254,11 +287,93 @@ public class TicketManager {
 				});
 			}
 
+			if (ticket.getCommissionChannel() != null) {
+				ticket.getCommissionChannel().delete().queue();
+			}
+
 			ticket.setState(TicketState.CLOSED);
 
 			this.sqlManager.updateTicketState(ticket);
 		}
 
+	}
+
+	public void startQuoting(Long id, String description, String deadline, String type) {
+		Ticket ticket = this.tickets.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+
+		if (ticket != null && ticket.getState() == TicketState.OPEN) {
+
+			ticket.setFinalDescription(description);
+			ticket.setFinalDeadline(deadline);
+			ticket.setState(TicketState.CONFIRMING);
+
+			this.sqlManager.updateTicketFinalInfo(ticket);
+			this.sqlManager.updateTicketState(ticket);
+
+			if (!type.isEmpty()) {
+				ticket.setCategory(type);
+				this.sqlManager.updateTicketCategory(ticket);
+			}
+
+			User user = this.bot.getJda().getUserById(ticket.getOwner());
+
+			ticket.getChannel().sendMessage(new EmbedBuilder()
+					.setColor(new Color(33,119,254))
+					.setTitle("Odyssey Ticket System")
+					.setDescription("**" + user.getName() + "** please confirm you want to order your commission:")
+					.addField("**Details**", ticket.getFinalDescription(), false)
+					.addField("**Deadline**", ticket.getFinalDeadline(), false)
+					.addField("**Confirm**", "React with " + this.bot.acceptEmote + " to confirm\n" +
+							"React with " + this.bot.denyEmote + " to deny", false)
+					.build())
+					.queue(m -> {
+						m.addReaction(this.bot.acceptEmote).queue();
+						m.addReaction(this.bot.denyEmote).queue();
+					});
+
+			ticket.getChannel().sendMessage(user.getAsMention()).queue(m -> m.delete().queueAfter(1, TimeUnit.SECONDS));
+
+		}
+	}
+
+	public void finishQuoting(Long id) {
+		Ticket ticket = this.tickets.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+
+		if (ticket != null && ticket.getState() == TicketState.QUOTING) {
+
+			ticket.setState(TicketState.QUOTING_SELECT);
+			this.sqlManager.updateTicketState(ticket);
+
+			Role role = ticket.getCategory().equalsIgnoreCase("builder") ? this.bot.builderRole : this.bot.terraformerRole;
+			ticket.getCommissionChannel().putPermissionOverride(role)
+					.setAllow(Permission.EMPTY_PERMISSIONS)
+					.setDeny(Permission.MESSAGE_READ)
+					.queue();
+
+			TextChannel channel = ticket.getChannel();
+
+			channel.sendMessage("**" + this.bot.getJda().getUserById(ticket.getOwner()).getAsMention() + ", we are happy to announce that your commission is ready to continue!**\n" +
+					"We have found multiple quotes from our Builders for you to pick from.\n" +
+					"Please click the " + this.bot.acceptEmote + " next to the builder you'd like")
+					.queue(msg -> {
+
+						ticket.setQuoteMessage(msg.getIdLong());
+						this.sqlManager.updateTicketQuoteMessage(ticket);
+
+						for (Map.Entry<Long, Integer> quote : ticket.getQuotes().entrySet()) {
+
+							User user = this.bot.getJda().getUserById(quote.getKey());
+							String portfolio = this.sqlManager.getPortfolio(quote.getKey());
+
+							channel.sendMessage(user.getAsMention() + ": " + portfolio + "\n" +
+									"Price: $" + quote.getValue()).queue(m -> m.addReaction(this.bot.acceptEmote).queue());
+
+						}
+
+						channel.sendMessage("If you would like to **keep waiting for a new builder**,\n" +
+								"Please click the cross below.").queue(m -> m.addReaction(this.bot.denyEmote).queue());
+					});
+		}
 	}
 
 	public void setPrice(Long id, Integer price, String description, String deadline, String type) {
@@ -559,6 +674,8 @@ public class TicketManager {
 
 							event.getChannel().getMessageById(event.getMessageIdLong()).queue(msg -> msg.clearReactions().queue());
 
+							ticket.getChannel().sendMessage(this.bot.acceptEmote + " User has agreed to the Terms of Services!").queue();
+
 							ticket.getChannel().sendMessage(new EmbedBuilder()
 									.setColor(new Color(33, 119, 254))
 									.setTitle("Odyssey Ticket System")
@@ -610,22 +727,162 @@ public class TicketManager {
 
 				break;
 
+			case QUOTING_SELECT:
+
+				if (event.getReactionEmote().getName().equals(this.bot.acceptEmote)) {
+
+					ticket.getChannel().getMessageById(event.getMessageIdLong()).queue(msg -> {
+
+						String arg = msg.getContentRaw().split(" ")[0];
+						Long builder = Long.valueOf(arg.substring(2, arg.length() - 2));
+
+						Integer price = ticket.getQuotes().get(builder);
+
+						ticket.setPrice(price);
+						ticket.addBuilder(builder);
+						ticket.setState(TicketState.AWAITING_FIRST_PAYMENT);
+
+						this.sqlManager.updateTicketPrice(ticket);
+						this.sqlManager.addBuilder(ticket, builder);
+						this.sqlManager.updateTicketState(ticket);
+
+						if (ticket.getCommissionChannel() != null) {
+							ticket.getCommissionChannel().delete().queue();
+							ticket.setCommissionChannel(null);
+						}
+
+						String paypal = this.sqlManager.getPaypal(ticket.getClaimer());
+
+						ticket.getChannel().sendMessage(new EmbedBuilder()
+								.setColor(new Color(33,119,254))
+								.setTitle("Odyssey Ticket System")
+								.setDescription("Before the Commission can start, we will need to take 50% of the payment ($" + (((double) ticket.getPrice()) / 2) + ")." +
+										" Please send the money to " + paypal + " via the Friends & Family option.\n" +
+										"\n" +
+										"Once this has been done, the Manager can confirm so and the commission can begin.\n")
+								.build())
+								.queue();
+
+						Guild guild = ticket.getChannel().getGuild();
+
+						ticket.getChannel().putPermissionOverride(guild.getMemberById(ticket.getOwner()))
+								.setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
+								.setDeny(Permission.EMPTY_PERMISSIONS)
+								.queue();
+						ticket.getChannel().putPermissionOverride(guild.getMemberById(ticket.getClaimer()))
+								.setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
+								.setDeny(Permission.EMPTY_PERMISSIONS)
+								.queue();
+
+						for (Long b : ticket.getBuilders()) {
+							ticket.getChannel().putPermissionOverride(guild.getMemberById(b))
+									.setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
+									.setDeny(Permission.EMPTY_PERMISSIONS)
+									.queue();
+						}
+
+					});
+
+					ticket.getChannel().getMessageById(ticket.getQuoteMessage()).queue(m -> {
+						ticket.getChannel().getHistoryAfter(m, ticket.getQuotes().size() + 1).queue(messageHistory -> {
+							ticket.getChannel().deleteMessages(messageHistory.getRetrievedHistory()).queue();
+							m.delete().queue();
+						});
+					});
+
+				} else if (event.getReactionEmote().getName().equals(this.bot.denyEmote)) {
+
+					ticket.getChannel().getMessageById(ticket.getQuoteMessage()).queue(msg -> {
+						ticket.getChannel().getHistoryAfter(msg, 100).queue(messageHistory -> {
+							ticket.getChannel().deleteMessages(messageHistory.getRetrievedHistory()).queue();
+							msg.delete().queue();
+						});
+					});
+
+					ticket.setState(TicketState.QUOTING);
+					this.sqlManager.updateTicketState(ticket);
+
+					Role role = ticket.getCategory().equalsIgnoreCase("builder") ? this.bot.builderRole : this.bot.terraformerRole;
+					ticket.getCommissionChannel().putPermissionOverride(role)
+							.setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
+							.setDeny(Permission.EMPTY_PERMISSIONS)
+							.queue();
+
+					ticket.getCommissionChannel().sendMessage(role.getAsMention() + ", the quotes for this project have reopened!").queue();
+
+					ticket.getChannel().sendMessage(new EmbedBuilder()
+							.setColor(new Color(33,119,254))
+							.setTitle("Odyssey Ticket System")
+							.setDescription("Your project has been send back to builders and we'll come back to you as soon as we have new quotes!")
+							.build())
+							.queue();
+				} else {
+					event.getChannel().sendMessage(":x: Please use the correct reactions!").queue();
+					event.getReaction().removeReaction(event.getUser()).queue();
+					return;
+				}
+
+				break;
+
 			case CONFIRMING:
 
 				if (event.getReactionEmote().getName().equals(this.bot.acceptEmote)) {
 
-					ticket.setState(TicketState.AWAITING_BUILDER);
-					this.sqlManager.updateTicketState(ticket);
-
 					event.getChannel().getMessageById(event.getMessageIdLong()).queue(msg -> msg.clearReactions().queue());
-					event.getChannel().sendMessage(new EmbedBuilder()
-							.setColor(new Color(33, 119, 254))
-							.setTitle("Odyssey Ticket System")
-							.setDescription("Your final details have being sent off to our Builders. Once a Builder has confirmed that they can take the commission, you will be alerted.")
-							.build())
-							.queue();
 
-					this.sendCommissionMessage(ticket);
+					if (ticket.getPrice() > 0) {
+						ticket.setState(TicketState.AWAITING_BUILDER);
+						this.sqlManager.updateTicketState(ticket);
+
+						event.getChannel().sendMessage(new EmbedBuilder()
+								.setColor(new Color(33, 119, 254))
+								.setTitle("Odyssey Ticket System")
+								.setDescription("Your final details have being sent off to our Builders. Once a Builder has confirmed that they can take the commission, you will be alerted.")
+								.build())
+								.queue();
+
+						this.sendCommissionMessage(ticket);
+
+					} else {
+
+						ticket.setState(TicketState.QUOTING);
+						this.sqlManager.updateTicketState(ticket);
+
+						ticket.getChannel().sendMessage(new EmbedBuilder()
+								.setColor(new Color(33,119,254))
+								.setTitle("Odyssey Ticket System")
+								.setDescription("Your project is now being quoted by our builders and we'll come back to you as soon as we have enough quotes!")
+								.build())
+								.queue();
+
+						ticket.getChannel().putPermissionOverride(ticket.getChannel().getGuild().getMemberById(ticket.getOwner()))
+								.setAllow(Permission.MESSAGE_READ)
+								.setDeny(Permission.MESSAGE_WRITE)
+								.queue();
+
+						if (ticket.getCommissionChannel() == null) {
+							this.createCommissionChannel(ticket.getChannel().getGuild(), ticket);
+						}
+
+						while (ticket.getCommissionChannel() == null) {
+							Core.sleep(100);
+						}
+
+						ticket.getCommissionChannel().sendMessage(new EmbedBuilder()
+								.setColor(new Color(33,119,254))
+								.setTitle("Odyssey Ticket System")
+								.setDescription("**New project available for quoting**")
+								.addField("**Details**", ticket.getFinalDeadline(), false)
+								.addField("**Deadline**", ticket.getFinalDeadline(), false)
+								.addField("**Quote**", "Use " + Bot.PREFIX + "quote <price> to add your quote!", false)
+								.build())
+								.queue();
+
+						Role role = ticket.getCategory().equalsIgnoreCase("builder") ? this.bot.builderRole : this.bot.terraformerRole;
+
+						ticket.getCommissionChannel().sendMessage(role.getAsMention()).queue(msg -> msg.delete().queueAfter(1, TimeUnit.SECONDS));
+
+					}
 
 				} else if (event.getReactionEmote().getName().equals(this.bot.denyEmote)) {
 
@@ -634,6 +891,21 @@ public class TicketManager {
 
 					event.getChannel().sendMessage(":x: " + event.getUser().getName() + " has denied the offer!").queue();
 					event.getChannel().getMessageById(event.getMessageIdLong()).queue(msg -> msg.clearReactions().queue());
+
+					if (ticket.getPrice() == 0) {
+						for (Long builder : ticket.getBuilders()) {
+							ticket.removeBuilder(builder);
+							this.sqlManager.deleteBuilder(ticket, builder);
+						}
+
+						ticket.getQuotes().clear();
+						this.sqlManager.clearQuotes(ticket);
+
+						if (ticket.getCommissionChannel() != null) {
+							ticket.getCommissionChannel().delete().queue();
+							ticket.setCommissionChannel(null);
+						}
+					}
 
 				} else {
 					event.getChannel().sendMessage(":x: Please use the correct reactions!").queue();

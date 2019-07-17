@@ -4,6 +4,9 @@ import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.gylliegyllie.odysseybot.Bot;
+import net.gylliegyllie.odysseybot.discord.commands.AddBuilderCommand;
+import net.gylliegyllie.odysseybot.discord.commands.AddManagerCommand;
+import net.gylliegyllie.odysseybot.discord.commands.AddUserCommand;
 import net.gylliegyllie.odysseybot.discord.commands.ApplyCommand;
 import net.gylliegyllie.odysseybot.discord.commands.CloseCommand;
 import net.gylliegyllie.odysseybot.discord.commands.CloseCommissionCommand;
@@ -12,9 +15,17 @@ import net.gylliegyllie.odysseybot.discord.commands.DiscordCommand;
 import net.gylliegyllie.odysseybot.discord.commands.DoneCommand;
 import net.gylliegyllie.odysseybot.discord.commands.FinalCommand;
 import net.gylliegyllie.odysseybot.discord.commands.FinishedCommand;
+import net.gylliegyllie.odysseybot.discord.commands.HelpCommand;
+import net.gylliegyllie.odysseybot.discord.commands.InfoCommand;
 import net.gylliegyllie.odysseybot.discord.commands.PaidCommand;
 import net.gylliegyllie.odysseybot.discord.commands.PicCommand;
 import net.gylliegyllie.odysseybot.discord.commands.QuickDoneCommand;
+import net.gylliegyllie.odysseybot.discord.commands.QuoteCommand;
+import net.gylliegyllie.odysseybot.discord.commands.QuotesCommand;
+import net.gylliegyllie.odysseybot.discord.commands.RankCommand;
+import net.gylliegyllie.odysseybot.discord.commands.RemoveBuilderCommand;
+import net.gylliegyllie.odysseybot.discord.commands.RemoveManagerCommand;
+import net.gylliegyllie.odysseybot.discord.commands.TotalCommand;
 import net.gylliegyllie.odysseybot.discord.commands.UpdateInfoCommand;
 import net.gylliegyllie.odysseybot.util.MessageUtil;
 import org.slf4j.Logger;
@@ -38,7 +49,11 @@ public class MessageListener extends ListenerAdapter {
 
 	public void init() {
 		this.commands.put("apply", new ApplyCommand());
+		this.commands.put("help", new HelpCommand(this.bot));
+		this.commands.put("info", new InfoCommand(this.bot));
 		this.commands.put("updateinfo", new UpdateInfoCommand(this.bot));
+		this.commands.put("rank", new RankCommand(this.bot));
+		this.commands.put("total", new TotalCommand(this.bot));
 		this.commands.put("close", new CloseCommand(this.bot));
 		this.commands.put("done", new DoneCommand(this.bot));
 		this.commands.put("quickdone", new QuickDoneCommand(this.bot));
@@ -48,6 +63,13 @@ public class MessageListener extends ListenerAdapter {
 		this.commands.put("pic", new PicCommand(this.bot));
 		this.commands.put("final", new FinalCommand(this.bot));
 		this.commands.put("closecom", new CloseCommissionCommand(this.bot));
+		this.commands.put("quote", new QuoteCommand(this.bot));
+		this.commands.put("quotes", new QuotesCommand(this.bot));
+		this.commands.put("adduser", new AddUserCommand(this.bot));
+		this.commands.put("addbuilder", new AddBuilderCommand(this.bot));
+		this.commands.put("removebuilder", new RemoveBuilderCommand(this.bot));
+		this.commands.put("addmanager", new AddManagerCommand(this.bot));
+		this.commands.put("removemanager", new RemoveManagerCommand(this.bot));
 	}
 
 	@Override

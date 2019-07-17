@@ -18,6 +18,7 @@ public class Configuration extends BaseConfiguration {
 	private Long ticketRequestChannel = -1L;
 	private Long commissionChannel = -1L;
 	private Long reviewsChannel = -1L;
+	private Long importantChannel = -1L;
 
 	private Long ticketsCategory = -1L;
 	private Long supportCategory = -1L;
@@ -65,6 +66,10 @@ public class Configuration extends BaseConfiguration {
 
 	public Long getReviewsChannel() {
 		return this.reviewsChannel;
+	}
+
+	public Long getImportantChannel() {
+		return this.importantChannel;
 	}
 
 	public Long getTicketsCategory() {
