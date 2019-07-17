@@ -13,6 +13,7 @@ import net.gylliegyllie.odysseybot.discord.commands.CloseCommissionCommand;
 import net.gylliegyllie.odysseybot.discord.commands.CommissionCommand;
 import net.gylliegyllie.odysseybot.discord.commands.DiscordCommand;
 import net.gylliegyllie.odysseybot.discord.commands.DoneCommand;
+import net.gylliegyllie.odysseybot.discord.commands.EmbedCommand;
 import net.gylliegyllie.odysseybot.discord.commands.FinalCommand;
 import net.gylliegyllie.odysseybot.discord.commands.FinishedCommand;
 import net.gylliegyllie.odysseybot.discord.commands.HelpCommand;
@@ -23,6 +24,7 @@ import net.gylliegyllie.odysseybot.discord.commands.QuickDoneCommand;
 import net.gylliegyllie.odysseybot.discord.commands.QuoteCommand;
 import net.gylliegyllie.odysseybot.discord.commands.QuotesCommand;
 import net.gylliegyllie.odysseybot.discord.commands.RankCommand;
+import net.gylliegyllie.odysseybot.discord.commands.ReactCommand;
 import net.gylliegyllie.odysseybot.discord.commands.RemoveBuilderCommand;
 import net.gylliegyllie.odysseybot.discord.commands.RemoveManagerCommand;
 import net.gylliegyllie.odysseybot.discord.commands.TotalCommand;
@@ -70,6 +72,8 @@ public class MessageListener extends ListenerAdapter {
 		this.commands.put("removebuilder", new RemoveBuilderCommand(this.bot));
 		this.commands.put("addmanager", new AddManagerCommand(this.bot));
 		this.commands.put("removemanager", new RemoveManagerCommand(this.bot));
+		this.commands.put("embed", new EmbedCommand(this.bot));
+		this.commands.put("react", new ReactCommand(this.bot));
 	}
 
 	@Override
