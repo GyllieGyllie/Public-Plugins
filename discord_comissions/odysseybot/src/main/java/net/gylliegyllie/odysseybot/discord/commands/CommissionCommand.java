@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.gylliegyllie.odysseybot.Bot;
+import net.gylliegyllie.odysseybot.tickets.entities.Ticket;
 import net.gylliegyllie.odysseybot.util.MessageUtil;
 
 public class CommissionCommand extends DiscordCommand {
@@ -19,6 +20,8 @@ public class CommissionCommand extends DiscordCommand {
 	@Override
 	public void runCommand(MessageReceivedEvent event, String command, String[] args) {
 		if (!this.verifyInTicket(event)) return;
+
+		event.getMessage().delete().queue();
 
 		if (args.length == 0) {
 			MessageUtil.sendDM(event.getAuthor(), String.format("Use `%scomm <price|quote> -d <details> -dl <deadline>` to set a price or start the quoting process!", Bot.PREFIX));
@@ -94,6 +97,13 @@ public class CommissionCommand extends DiscordCommand {
 			return;
 		}
 
+		Ticket ticket = this.bot.getTicketManager().getTicket(ticketID);
+
+		if (ticket != null && ticket.getClaimer() == -1L) {
+			MessageUtil.sendDM(event.getAuthor(), "Cannot use this command if the ticket has no manager claimed yet!");
+			return;
+		}
+
 		if (args[0].equalsIgnoreCase("quote")) {
 
 			this.bot.getTicketManager().startQuoting(ticketID, details, deadline, type);
@@ -108,7 +118,5 @@ public class CommissionCommand extends DiscordCommand {
 
 			this.bot.getTicketManager().setPrice(ticketID, price, details, deadline, type);
 		}
-
-		event.getMessage().delete().queue();
 	}
 }
