@@ -1,0 +1,5 @@
+name: Stellar_SMP
+main: net.gylliegyllie.stellarsmp.Main
+version: 1.0
+api-version: 1.14
+commands:

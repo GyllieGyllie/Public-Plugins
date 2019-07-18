@@ -198,6 +198,8 @@ select option {
     font-size: 3rem;
 }
 
+.members-icons .fa-instagram,
+.members-icons .fa-twitter,
 .members-icons .fa-twitch,
 .members-icons .fa-youtube {
     margin-left: 1rem;
@@ -209,6 +211,10 @@ select option {
 
 .member-head {
     height: 3rem;
+}
+
+.fa-instagram {
+    color: #e4405f;
 }
 
 .fa-twitter {
