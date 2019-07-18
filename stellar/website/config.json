@@ -3,7 +3,7 @@
     "config_id": "development",
     "production": false,
     "maintenance": false,
-    "node_port": 5545,
+    "node_port": 5546,
     "sql": {
       "user": "stellarsmp",
       "pass": "6Wk0fNnIOT84Z6x",
