@@ -7,6 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 
+	private LiveThread liveThread;
+
 	@Override
 	public void onEnable() {
 
@@ -15,7 +17,7 @@ public class Main extends JavaPlugin {
 		// Register listeners
 		this.getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
-		new LiveThread(this);
+		this.liveThread = new LiveThread(this);
 
 		this.getLogger().info("SMP Plugin booted :D");
 	}
@@ -23,5 +25,9 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		this.getLogger().info("SMP Plugin disabled :(");
+	}
+
+	public LiveThread getLiveThread() {
+		return this.liveThread;
 	}
 }

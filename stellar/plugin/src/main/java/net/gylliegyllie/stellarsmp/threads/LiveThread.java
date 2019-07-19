@@ -49,7 +49,7 @@ public class LiveThread {
 						player.setDisplayName(ChatColor.DARK_PURPLE + player.getName());
 					} else {
 						if (player.getDisplayName().startsWith(ChatColor.DARK_PURPLE.toString())) {
-							player.setDisplayName(ChatColor.WHITE + player.getName());
+							player.setDisplayName(ChatColor.RED + player.getName());
 						}
 					}
 				}
@@ -59,5 +59,9 @@ public class LiveThread {
 			}
 
 		}, 60 * 20L, 60 * 20L);
+	}
+
+	public boolean isLive(UUID uuid) {
+		return this.live.contains(uuid);
 	}
 }
