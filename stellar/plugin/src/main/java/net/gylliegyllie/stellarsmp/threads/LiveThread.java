@@ -18,7 +18,7 @@ public class LiveThread {
 
 	private final Main plugin;
 
-	private List<UUID> live;
+	private List<UUID> live = new ArrayList<>();
 
 	public LiveThread(Main plugin) {
 		this.plugin = plugin;
