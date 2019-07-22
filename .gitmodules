@@ -1,0 +1,3 @@
+[submodule "discord_comissions/OdysseyBot"]
+	path = discord_comissions/OdysseyBot
+	url = git@github.com:GyllieGyllie/OdysseyBot.git
