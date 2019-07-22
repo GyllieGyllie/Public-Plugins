@@ -1,0 +1,11 @@
+name: WildestBreeding
+author: GyllieGyllie
+main: net.gylliegyllie.wildestbreeding.Plugin
+version: 1.0
+description: Commission for WildestPartnership | Breeding overhaul
+api-version: 1.13
+commands:
+  animalfeed:
+    permission: animalfeed.use
+    usage: /animalfeed <player> <mob> <quantity>
+    description: give a player animal feed
