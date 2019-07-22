@@ -1,0 +1,93 @@
+[
+  {
+    "mob": "CHICKEN",
+    "packet": "PAPER",
+    "packetName": "Chicken Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "COW",
+    "packet": "PAPER",
+    "packetName": "Cow Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "DONKEY",
+    "packet": "PAPER",
+    "packetName": "Donkey Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "HORSE",
+    "packet": "PAPER",
+    "packetName": "Horse Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "LLAMA",
+    "packet": "PAPER",
+    "packetName": "Llama Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "MUSHROOM_COW",
+    "packet": "PAPER",
+    "packetName": "Mooshroom Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "OCELOT",
+    "packet": "PAPER",
+    "packetName": "Ocelot Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "PARROT",
+    "packet": "PAPER",
+    "packetName": "Parrot Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "PIG",
+    "packet": "PAPER",
+    "packetName": "Pig Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "RABBIT",
+    "packet": "PAPER",
+    "packetName": "Rabbit Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "SHEEP",
+    "packet": "PAPER",
+    "packetName": "Sheep Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "TURTLE",
+    "packet": "PAPER",
+    "packetName": "Turtle Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  },
+  {
+    "mob": "WOLF",
+    "packet": "PAPER",
+    "packetName": "Wolf Feed",
+    "breedCooldown": 300,
+    "breedChance": 100
+  }
+]
