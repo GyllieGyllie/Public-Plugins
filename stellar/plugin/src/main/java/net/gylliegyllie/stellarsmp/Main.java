@@ -1,5 +1,6 @@
 package net.gylliegyllie.stellarsmp;
 
+import net.gylliegyllie.stellarsmp.listeners.BedListener;
 import net.gylliegyllie.stellarsmp.listeners.JoinListener;
 import net.gylliegyllie.stellarsmp.threads.LiveThread;
 import net.gylliegyllie.stellarsmp.utils.ThreadUtil;
@@ -16,6 +17,7 @@ public class Main extends JavaPlugin {
 
 		// Register listeners
 		this.getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new BedListener(), this);
 
 		this.liveThread = new LiveThread(this);
 
