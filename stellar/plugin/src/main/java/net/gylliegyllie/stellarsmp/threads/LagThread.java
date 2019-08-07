@@ -13,7 +13,7 @@ public class LagThread {
 
 	private final Main plugin;
 
-	private int seconds = 5 * 60;
+	private int seconds = 20 * 60;
 
 	public LagThread(Main plugin) {
 		this.plugin = plugin;
@@ -38,7 +38,7 @@ public class LagThread {
 				}
 
 				Bukkit.broadcastMessage(ChatColor.RED + "Cleared dropped items. " + count + " entities removed!");
-				this.seconds = 5 * 60;
+				this.seconds = 20 * 60;
 
 			} else {
 				if (this.seconds % 60 == 0 && this.seconds / 60 == 1) {
