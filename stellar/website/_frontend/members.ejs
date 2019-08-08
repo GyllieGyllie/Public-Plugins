@@ -114,6 +114,12 @@
                                     </a>
                                 <% } %>
 
+                                <% if (members[i].mixer && members[i].mixer !== "") { %>
+                                    <a href="<%= members[i].mixer %>" target="_blank">
+                                        <img src="/img/mixer.png" alt="mixer" />
+                                    </a>
+                                <% } %>
+
                                 <% if (members[i].twitch && members[i].twitch !== "") { %>
                                     <a href="https://www.twitch.tv/<%= members[i].twitch %>" target="_blank">
                                         <i class="feature-icons fab fa-twitch" aria-hidden="true"></i>
