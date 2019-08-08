@@ -209,6 +209,13 @@ select option {
     text-decoration: none !important;
 }
 
+.members-icons img {
+    height: 3rem;
+    width: 3rem;
+    vertical-align: top;
+    margin-left: 1rem;
+}
+
 .member-head {
     height: 3rem;
 }
