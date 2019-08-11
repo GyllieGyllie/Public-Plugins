@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
 
 		this.liveThread = new LiveThread(this);
 		this.youtubeThread = new YoutubeThread(this);
-		new LagThread(this);
+		//new LagThread(this);
 
 		this.getCommand("record").setExecutor(new Record(this));
 
