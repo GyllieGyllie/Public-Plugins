@@ -29,7 +29,7 @@ public class LiveThread {
 
 				List<UUID> live = new ArrayList<>();
 
-				HttpResponse<JsonNode> response = Unirest.get("https://stellarsmp.com/api/live").asJson();
+				HttpResponse<JsonNode> response = Unirest.get("https://stellarsmp.net/api/live").asJson();
 				JSONObject jsonObject = response.getBody().getObject();
 
 				if (jsonObject.has("live")) {
