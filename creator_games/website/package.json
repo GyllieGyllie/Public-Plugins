@@ -23,7 +23,7 @@
     "google-protobuf": "^3.0.0",
     "grpc": "^1.17.0",
     "http-errors": "^1.7.1",
-    "moment": "^2.23.0",
+    "moment": "^2.29.2",
     "morgan": "^1.9.1",
     "req-flash": "0.0.3",
     "rotating-file-stream": "^1.4.0"
