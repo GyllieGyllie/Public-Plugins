@@ -17,7 +17,7 @@
   "homepage": "https://github.com/GyllieGyllie/Public-Plugins#readme",
   "dependencies": {
     "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-async-handler": "^1.1.4",
     "http-errors": "^1.7.1",
     "lodash": "^4.17.11",
